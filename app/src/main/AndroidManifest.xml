@@ -13,8 +13,7 @@
         android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP"
         tools:targetApi="31">
 
-        <activity
-            android:name=".LaunchPageActivity"
+        
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

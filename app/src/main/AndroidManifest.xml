@@ -12,19 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP"
         tools:targetApi="31">
-        <activity
-            android:name=".ProfilePage"
-            android:exported="false"
-            android:label="@string/title_activity_profile_page" />
-        <activity
-            android:name=".EditProfile"
-            android:exported="false"
-            android:label="@string/title_activity_edit_profile" />
-        <activity
-            android:name=".LoginPage"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+
+        
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

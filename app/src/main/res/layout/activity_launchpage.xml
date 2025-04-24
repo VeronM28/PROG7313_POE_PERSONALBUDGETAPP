@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".LaunchPageActivity"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/mzansi_money"
+        android:background="@android:color/transparent"
+        />
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_launch_login"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:background="@drawable/gradient_background"
+            android:backgroundTint="@null"
+            android:text="Login"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            app:backgroundTint="@null"
+            app:cornerRadius="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:padding="10dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_launch_reg"
+            android:layout_width="140dp"
+            android:layout_height="55dp"
+            android:background="@drawable/gradient_background"
+            android:backgroundTint="@null"
+            android:text="Register"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            app:backgroundTint="@null"
+            app:cornerRadius="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"/>
+    <TextView
+        android:id="@+id/txtViewHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Need Help?"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
+
+    </LinearLayout>
+
+
+
+

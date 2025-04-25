@@ -11,7 +11,4 @@ interface HelpPageContentDao {
 
     @Query("SELECT * FROM help_page_content ORDER BY displayOrder ASC")
     fun getHelpContent(): LiveData<List<HelpPageContent>>
-
-    @Query("SELECT * FROM help_page_content WHERE pageTag = :tag ORDER BY displayOrder ASC")
-    fun getHelpContentByPage(tag: String): LiveData<List<HelpPageContent>>
 }

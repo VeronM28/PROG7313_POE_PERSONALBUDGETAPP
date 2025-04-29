@@ -1,4 +1,4 @@
-package com.st10083866.prog7313_poe_personalbudgetapp
+package com.st10083866.prog7313_poe_personalbudgetapp.ui.profile
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -7,21 +7,22 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityCreateSavingsGoalBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.R
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityEditProfileBinding
 
-class CreateSavingsGoal : AppCompatActivity() {
+class EditProfile : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCreateSavingsGoalBinding
+    private lateinit var binding: ActivityEditProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityCreateSavingsGoalBinding.inflate(layoutInflater)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_savings_goals)
+        val navController = findNavController(R.id.nav_host_fragment_activity_edit_profile)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(

@@ -13,13 +13,13 @@
         android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP"
         tools:targetApi="31" >
         <activity
-            android:name=".CreateSavingsContribution"
+            android:name=".ui.savings.CreateSavingsContribution"
             android:exported="false" />
         <activity
-            android:name=".SavingsGoalPage"
+            android:name=".ui.savings.SavingsGoalPage"
             android:exported="false" />
         <activity
-            android:name=".CreateSavingsGoal"
+            android:name=".ui.savings.CreateSavingsGoal"
             android:exported="false"
             android:label="@string/title_activity_create_savings_goal" />
         <activity

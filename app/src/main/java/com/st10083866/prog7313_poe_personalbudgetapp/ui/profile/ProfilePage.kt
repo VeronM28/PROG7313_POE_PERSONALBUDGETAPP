@@ -1,4 +1,4 @@
-package com.st10083866.prog7313_poe_personalbudgetapp
+package com.st10083866.prog7313_poe_personalbudgetapp.ui.profile
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityProfilePageBinding
 
 class ProfilePage : AppCompatActivity() {

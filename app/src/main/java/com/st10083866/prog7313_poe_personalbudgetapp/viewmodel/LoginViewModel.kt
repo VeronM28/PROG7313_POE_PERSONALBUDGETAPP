@@ -21,7 +21,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application){
     //this function inserts a new user into the database
     fun registerUser(user: User, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            userDao.insert(user)
+            userDao.insertUser(user)
             onResult(true)
         }
     }

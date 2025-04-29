@@ -13,7 +13,7 @@
         android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP"
         tools:targetApi="31">
         <activity
-            android:name=".ui.Home.MainPageActivity"
+            android:name=".ui.home.MainPageActivity"
             android:exported="false" />
         <activity
             android:name=".ui.savings.CreateSavingsContribution"

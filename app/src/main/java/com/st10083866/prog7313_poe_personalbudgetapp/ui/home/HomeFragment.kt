@@ -1,4 +1,4 @@
-package com.st10083866.prog7313_poe_personalbudgetapp.ui.Home
+package com.st10083866.prog7313_poe_personalbudgetapp.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

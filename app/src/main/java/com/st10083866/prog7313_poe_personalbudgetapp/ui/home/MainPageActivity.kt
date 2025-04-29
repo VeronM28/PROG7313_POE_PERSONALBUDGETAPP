@@ -1,10 +1,8 @@
-package com.st10083866.prog7313_poe_personalbudgetapp.ui.Home
+package com.st10083866.prog7313_poe_personalbudgetapp.ui.home
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.emptyLongSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,7 +10,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.st10083866.prog7313_poe_personalbudgetapp.R
-import androidx.core.view.GravityCompat
 
 class MainPageActivity : AppCompatActivity() {
 

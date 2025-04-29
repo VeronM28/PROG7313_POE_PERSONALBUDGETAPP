@@ -44,7 +44,7 @@ class ProfilePage : AppCompatActivity() {
 
         profileViewModel.user.observe(this) { user ->
             if (user != null) {
-                val userFullName = "@${user.fname + user.sname}"
+                val userFullName = "@${user.firstName + user.lastName}"
                 binding.txtUsername.text = userFullName
                 binding.txtUsername.text = "@${user.username}"
                 binding.txtEmail.text = user.email

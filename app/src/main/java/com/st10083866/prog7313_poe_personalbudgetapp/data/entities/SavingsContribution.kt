@@ -17,6 +17,5 @@ data class SavingsContribution(
     @PrimaryKey(autoGenerate = true) val id: Int= 0,
     val goalId: Int,
     val amount: Double,
-    val contributionDate: String,
-    val note: String? = null
+    val contributionDate: String
 )

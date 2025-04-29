@@ -9,6 +9,6 @@ interface SavingsGoalDao {
     @Insert
     suspend fun insert(goal: SavingsGoal)
 
-    @Query("SELECT * FROM savings_goals WHERE userOwnerId = :userid")
+    @Query("SELECT * FROM savings_goals WHERE userOwnerId = :userId")
     fun getGoals(userId: Int): LiveData<List<SavingsGoal>>
 }

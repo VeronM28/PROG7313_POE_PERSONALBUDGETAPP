@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
     //required for room annotation processing
-    id("com.google.devtools.ksp")
+    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
 }
 
 android {

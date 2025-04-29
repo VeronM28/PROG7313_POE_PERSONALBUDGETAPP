@@ -95,7 +95,7 @@
             android:layout_height="45dp"
             android:background="@drawable/gradient_background"
             android:backgroundTint="@null"
-            android:text="Login"
+            android:text="Register"
             android:visibility="visible"
             app:backgroundTint="@null"
             app:cornerRadius="50dp"

@@ -1,5 +1,6 @@
 package com.st10083866.prog7313_poe_personalbudgetapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -75,8 +76,11 @@ class RegActivity : AppCompatActivity() {
         lifecycleScope.launch {
             db.userDao().insertUser(user)
             runOnUiThread {
-                Toast.makeText(this@RegActivity, "Registration Successful", Toast.LENGTH_SHORT).show()
-                finish() // Close the registration page
+                Toast.makeText(this@RegActivity, "Registration successful! Please log in", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this@RegActivity, LoginPage::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }

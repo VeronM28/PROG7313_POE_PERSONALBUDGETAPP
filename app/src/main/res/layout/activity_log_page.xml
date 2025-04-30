@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/cardview_light_background"
+    tools:context=".ActivityLogPage">
+
+    <!-- Date Range Picker -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtStartDate"
+            android:layout_width="14dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/gradient_background"
+            android:drawableStart="@drawable/ic_calender"
+            android:focusable="false"
+            android:hint="From Date"
+            android:inputType="none" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edtEndDate"
+            android:layout_width="29dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/gradient_background"
+            android:drawableStart="@drawable/ic_calender"
+            android:focusable="false"
+            android:hint="To Date"
+            android:inputType="none" />
+    </LinearLayout>
+
+    <!-- Update Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnUpdateLogs"
+        android:layout_width="373dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_background"
+        android:text="Update Logs"
+        android:visibility="visible" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activityLogRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/item_activity_log" />
+
+</LinearLayout>

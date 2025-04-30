@@ -25,16 +25,16 @@
         </activity>
         <activity android:name=".LoginPage" />
         <activity android:name=".RegActivity" />
-        <activity android:name=".EditProfile" />
-        <activity android:name=".ProfilePage" />
+        <activity android:name=".ui.profile.EditProfile" />
+        <activity android:name=".ui.profile.ProfilePage" />
         <activity
-            android:name=".CreateSavingsContribution"
+            android:name=".ui.savings.CreateSavingsContribution"
             android:exported="false" />
         <activity
-            android:name=".SavingsGoalPage"
+            android:name=".ui.savings.SavingsGoalPage"
             android:exported="false" />
         <activity
-            android:name=".CreateSavingsGoal"
+            android:name=".ui.savings.CreateSavingsGoal"
             android:exported="false"
             android:label="@string/title_activity_create_savings_goal" />
     </application>

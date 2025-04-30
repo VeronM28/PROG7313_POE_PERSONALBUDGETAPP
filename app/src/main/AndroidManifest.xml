@@ -10,21 +10,49 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/mzansi_money"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP">
+        android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP"
+        tools:targetApi="31">
+
+        
+        <activity
+            android:name=".BudgetOverview"
+            android:exported="false" />
+        <activity
+            android:name=".Dashboard"
+            android:exported="false" />
+        <activity
+            android:name=".EditBudget"
+            android:exported="false" />
+        <activity
+            android:name=".CreateBudget"
+            android:exported="false" />
+        <activity
+            android:name=".MonthlySpending"
+            android:exported="false" />
+        <activity
+            android:name=".Expenses"
+            android:exported="false" />
+        <activity
+            android:name=".EditSpending"
+            android:exported="false" />
+        <activity
+            android:name=".AddExpense"
+            android:exported="false" />
+
         <activity
         android:name=".ui.category.CategoryActivity"
         android:exported="false" />
         <activity
         android:name=".ActivityLogPage"
         android:exported="false" />
-            android:name=".LaunchPageActivity"
-            android:exported="true">
+      
+            <activity android:name=".LaunchPageActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+      
         <activity android:name=".LoginPage" />
         <activity android:name=".RegActivity" />
         <activity android:name=".ui.profile.EditProfile" />

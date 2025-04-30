@@ -25,14 +25,14 @@
         app:layout_constraintVertical_bias="0.873" />
 
     <EditText
-        android:id="@+id/edtUsername"
+        android:id="@+id/etUsername"
         android:layout_width="304dp"
         android:layout_height="66dp"
         android:background="@drawable/gradient_background"
         android:ems="10"
         android:inputType="text"
         android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/edtPassword"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,27 +40,27 @@
         app:layout_constraintVertical_bias="0.842" />
 
     <TextView
-        android:id="@+id/txtUsername"
+        android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="Username"
-        app:layout_constraintStart_toStartOf="@+id/edtUsername"
-        app:layout_constraintTop_toBottomOf="@+id/edtUsername" />
+        app:layout_constraintStart_toStartOf="@+id/etUsername"
+        app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
     <TextView
-        android:id="@+id/txtPassword"
+        android:id="@+id/tvPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:text="Password"
-        app:layout_constraintStart_toStartOf="@+id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <EditText
-        android:id="@+id/edtPassword"
+        android:id="@+id/etPassword"
         android:layout_width="304dp"
         android:layout_height="66dp"
         android:layout_marginTop="188dp"

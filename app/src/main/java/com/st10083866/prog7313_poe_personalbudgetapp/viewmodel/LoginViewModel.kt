@@ -15,10 +15,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application){
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
 
-    //this function checks if the user exists based on email and password
-    fun loginUser(email: String, password: String, onResult: (User?) -> Unit){
+    //this function checks if the user exists based on username and password
+    fun loginUser(username: String, password: String, onResult: (User?) -> Unit){
         viewModelScope.launch {
-            val user = userDao.login(email, password)
+            val user = userDao.login(username, password)
             onResult(user)
         }
     }

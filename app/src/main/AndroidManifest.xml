@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PROG7313_POE_PERSONALBUDGETAPP">
         <activity
-            android:name=".ActivityLogPage"
-            android:exported="false" />
+        android:name=".ui.category.CategoryActivity"
+        android:exported="false" />
         <activity
+        android:name=".ActivityLogPage"
+        android:exported="false" />
             android:name=".LaunchPageActivity"
             android:exported="true">
             <intent-filter>

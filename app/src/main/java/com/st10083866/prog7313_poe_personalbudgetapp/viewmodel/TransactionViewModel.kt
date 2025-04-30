@@ -22,4 +22,9 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
             transactionDao.insert(transaction)
         }
     }
+
+    //this function gets the transactions between specific dates specified by the user
+    fun getTransactionsBetweenDates(userId: Int, from: Long, to: Long): LiveData<List<Transaction>> {
+        return transactionDao.getTransactionsForUserBetweenDates(userId, from, to)
+    }
 }

@@ -17,5 +17,7 @@ data class Category(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val userOwnerId: Int,
     val name: String,
-    val description: String
+    val description: String,
+    val limit: Double,
+    val isIncome: Boolean
 )

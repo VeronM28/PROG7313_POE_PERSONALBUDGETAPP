@@ -28,5 +28,6 @@ data class Transaction(
     val categoryId: Int?,
     val date: Long,
     val paymentMethod: String,
-    val uploadedAt: Long = System.currentTimeMillis()
+    val uploadedAt: Long = System.currentTimeMillis(),
+    val uploadedPicturePath: String? = null
 )

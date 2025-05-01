@@ -10,28 +10,31 @@ import com.st10083866.prog7313_poe_personalbudgetapp.repository.CategoryReposito
 import kotlinx.coroutines.launch
 
 class CategoryViewModel(application: Application) : AndroidViewModel(application) {
-    private val categoryDao = AppDatabase.getDatabase(application).categoryDao()
+    private val db = AppDatabase.getDatabase(application)
+    private val categoryDao = db.categoryDao()
     private val repository: CategoryRepository
+    val allCategories: LiveData<List<Category>>
 
     init {
         val categoryDao = AppDatabase.getDatabase(application).categoryDao()
         repository = CategoryRepository(categoryDao)
+        allCategories = repository.allCategories
     }
 
-    //this function gets all the categories for a user
-    fun getCategories(userId: Int): LiveData<List<Category>> {
-        return categoryDao.getCategory(userId)
-    }
-
-
-    //this function adds a category to the database
     fun addCategory(category: Category) {
         viewModelScope.launch {
             categoryDao.insertCategory(category)
         }
     }
-
-
+    fun insertCategory(category: Category) = viewModelScope.launch {
+        repository.insertCategory(category)
+    }
+    fun updateCategory(category: Category) = viewModelScope.launch {
+        repository.updateCategory(category)
+    }
+    fun deleteCategory(category: Category) = viewModelScope.launch {
+        repository.deleteCategory(category)
+    }
 
 
 }

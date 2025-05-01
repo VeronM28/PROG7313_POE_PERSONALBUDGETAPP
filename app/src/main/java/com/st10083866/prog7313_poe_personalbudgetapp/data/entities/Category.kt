@@ -19,5 +19,5 @@ data class Category(
     val name: String,
     val description: String,
     val limit: Double,
-    val isIncome: Boolean
+    val spendType: String
 )

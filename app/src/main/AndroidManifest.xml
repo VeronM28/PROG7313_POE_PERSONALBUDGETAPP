@@ -39,9 +39,7 @@
             android:name=".AddExpense"
             android:exported="false" />
 
-        <activity
-        android:name=".ui.category.CategoryActivity"
-        android:exported="false" />
+
         <activity
         android:name=".ActivityLogPage"
         android:exported="false" />
@@ -53,8 +51,8 @@
             </intent-filter>
         </activity>
       
-        <activity android:name=".LoginPage" />
-        <activity android:name=".RegActivity" />
+
+
         <activity android:name=".ui.profile.EditProfile" />
         <activity android:name=".ui.profile.ProfilePage" />
         <activity

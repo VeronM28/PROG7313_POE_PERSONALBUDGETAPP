@@ -1,6 +1,9 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.ui.category
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
@@ -8,91 +11,83 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityEditCategoryBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 
 class EditCategoryActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditCategoryBinding
-    private val categoryViewModel: CategoryViewModel by viewModels()
     private lateinit var spinnerCategories: Spinner
     private lateinit var etEditCategoryName: EditText
     private lateinit var etEditDescription: EditText
-    private lateinit var etEditLimit: EditText
-    private lateinit var typeToggleGroup: com.google.android.material.button.MaterialButtonToggleGroup
-    private lateinit var btnEditCategory: Button
-    private lateinit var btnDelete: Button
+    private lateinit var etLimit: EditText
+    private lateinit var incomeButton: View
+    private lateinit var expenseButton: View
+    private lateinit var typeToggleGroup: MaterialButtonToggleGroup
 
+    private val categoryViewModel: CategoryViewModel by viewModels()
+    private var categoryList = listOf<Category>()
     private var selectedCategory: Category? = null
-    private var userId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_edit_category)
 
-        // Get category ID from intent
-        currentCategoryId = intent.getIntExtra("CATEGORY_ID", -1)
-        if (currentCategoryId == -1) {
-            Toast.makeText(this, "Invalid category", Toast.LENGTH_SHORT).show()
-            finish()
-            return
+        spinnerCategories = findViewById(R.id.spinnerCategories)
+        etEditCategoryName = findViewById(R.id.etEditCategoryName)
+        etEditDescription = findViewById(R.id.etEditDescription)
+        etLimit = findViewById(R.id.etEditLimit)
+        typeToggleGroup = findViewById(R.id.typeToggleGroup)
+        incomeButton = findViewById(R.id.incomeButton)
+        expenseButton = findViewById(R.id.expenseButton)
+
+        val btnEdit = findViewById<Button>(R.id.btnEditCategory)
+        val btnDelete = findViewById<Button>(R.id.btnDelete)
+
+        categoryViewModel.allCategories.observe(this) { categories ->
+            categoryList = categories
+            val names = categories.map { it.name }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, names)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerCategories.adapter = adapter
         }
-
-        // Observe the category to prefill fields
-        categoryViewModel.getCategoryById(currentCategoryId).observe(this) { category ->
-            if (category != null) {
-                binding.etCategoryName.setText(category.name)
-                binding.etDesc.setText(category.description)
-                binding.etLimit.setText(category.limit.toString())
-
-                // Set toggle state
-                if (category.spendType) {
-                    binding.typeToggleGroup.check(R.id.incomeButton)
-                } else {
-                    binding.typeToggleGroup.check(R.id.expenseButton)
-                }
-
-                // Save updated category
-                binding.btnAddCategory.text = "Save Changes"
-                binding.btnAddCategory.setOnClickListener {
-                    val updatedName = binding.etCategoryName.text.toString()
-                    val updatedDesc = binding.etDesc.text.toString()
-                    val updatedLimit = binding.etLimit.text.toString().toDoubleOrNull()
-
-                    val updatedSpendType = when (binding.typeToggleGroup.checkedButtonId) {
-                        R.id.incomeButton -> true
-                        R.id.expenseButton -> false
-                        else -> category.spendType
+        spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedCategory = categoryList[position]
+                selectedCategory?.let { cat ->
+                    etEditCategoryName.setText(cat.name)
+                    etEditDescription.setText(cat.description)
+                    etLimit.setText(cat.limit.toString())
+                    if (cat.spendType == "Income") {
+                        typeToggleGroup.check(R.id.incomeButton)
+                    } else {
+                        typeToggleGroup.check(R.id.expenseButton)
                     }
-
-                    if (updatedName.isBlank() || updatedDesc.isBlank() || updatedLimit == null) {
-                        Toast.makeText(this, "Please fill all fields correctly", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-
-                    val updatedCategory = category.copy(
-                        name = updatedName,
-                        description = updatedDesc,
-                        limit = updatedLimit,
-                        spendType = updatedSpendType
-                    )
-
-                    categoryViewModel.updateCategory(updatedCategory)
-                    Toast.makeText(this, "Category updated", Toast.LENGTH_SHORT).show()
-                    finish()
                 }
+            }
 
-                // Optional: Add a separate delete button
-                binding.btnDeleteCategory?.setOnClickListener {
-                    categoryViewModel.deleteCategory(category)
-                    Toast.makeText(this, "Category deleted", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        btnEdit.setOnClickListener {
+            selectedCategory?.let { cat ->
+                val updatedCategory = cat.copy(
+                    name = etEditCategoryName.text.toString().ifBlank { cat.name },
+                    description = etEditDescription.text.toString().ifBlank { cat.description },
+                    limit = etLimit.text.toString().toDoubleOrNull() ?: cat.limit,
+                    spendType = if (typeToggleGroup.checkedButtonId == R.id.incomeButton) "Income" else "Expense"
+                )
+                categoryViewModel.updateCategory(updatedCategory)
+                Toast.makeText(this, "Category updated", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+        btnDelete.setOnClickListener {
+            selectedCategory?.let {
+                categoryViewModel.deleteCategory(it)
+                Toast.makeText(this, "Category deleted", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 

@@ -11,4 +11,17 @@ interface BudgetDao {
 
     @Query("SELECT * FROM budgets WHERE userOwnerId = :userId")
     fun getBudget(userId: Int): LiveData<List<Budget>>
+
+    // Add to BudgetDao.kt
+    @Query("SELECT * FROM budgets WHERE userOwnerId = :userId AND month = :month AND year = :year")
+    fun getBudgetForMonth(userId: Int, month: String, year: String): LiveData<Budget>
+
+    @Update
+    suspend fun updateBudget(budget: Budget)
+
+    @Query("SELECT * FROM budgets WHERE id = :budgetId")
+    fun getBudgetById(budgetId: Int): LiveData<Budget>
+
+    @Delete
+    suspend fun delete(budget: Budget)
 }

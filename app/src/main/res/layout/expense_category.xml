@@ -18,15 +18,6 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Category Icon -->
-        <ImageView
-            android:id="@+id/categoryIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="@string/category_icon"
-            android:src="@drawable/ic_category_default"
-            android:tint="#6200EE" />
 
         <!-- Text Content -->
         <LinearLayout

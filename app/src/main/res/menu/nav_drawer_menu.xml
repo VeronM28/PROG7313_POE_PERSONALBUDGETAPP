@@ -45,6 +45,11 @@
             android:id="@+id/navLogPage"
             android:title="Spending Logs" />
 
+        <item
+            android:id="@+id/navEditCategory"
+            android:title="Edit Category" />
+
+
 
 
     </group>

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLaunchpageBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.LoginPageFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.RegPageFragment
 
 class LaunchPageActivity : AppCompatActivity() {
 
@@ -22,12 +24,12 @@ class LaunchPageActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnLaunchLogin.setOnClickListener {
-            val intent = Intent(this, LoginPage::class.java)
+            val intent = Intent(this, LoginPageFragment::class.java)
             startActivity(intent)
         }
 
         binding.btnLaunchReg.setOnClickListener {
-            val intent = Intent(this, RegActivity::class.java)
+            val intent = Intent(this, RegPageFragment::class.java)
             startActivity(intent)
         }
 

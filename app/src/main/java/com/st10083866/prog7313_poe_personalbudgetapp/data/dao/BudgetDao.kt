@@ -24,4 +24,6 @@ interface BudgetDao {
 
     @Delete
     suspend fun delete(budget: Budget)
+
+
 }

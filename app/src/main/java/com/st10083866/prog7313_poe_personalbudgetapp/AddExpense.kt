@@ -1,4 +1,3 @@
-// AddExpenseActivity.kt
 package com.st10083866.prog7313_poe_personalbudgetapp.activities
 
 import android.app.DatePickerDialog
@@ -7,17 +6,17 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityAddExpenseBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodels.AddExpenseViewModel
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodels.ViewModelFactory
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddExpenseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddExpenseBinding
-    private val viewModel: AddExpenseViewModel by viewModels { ViewModelFactory(this) }
+    private val transactionViewModel: TransactionViewModel by viewModels()
+    private val categoryViewModel: CategoryViewModel by viewModels()
     private val calendar = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
 
@@ -26,9 +25,7 @@ class AddExpenseActivity : AppCompatActivity() {
         binding = ActivityAddExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get current user ID - in a real app, this would come from your auth system
         val userId = 1 // Replace with actual user ID
-
         setupViews(userId)
         setupClickListeners()
     }
@@ -41,7 +38,7 @@ class AddExpenseActivity : AppCompatActivity() {
         binding.paymentMethodSpinner.adapter = paymentAdapter
 
         // Setup category spinner
-        viewModel.getCategories(userId).observe(this, Observer { categories ->
+        categoryViewModel.getCategories(userId).observe(this, Observer { categories ->
             val categoryNames = categories.map { it.name }
             val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
             categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -88,7 +85,6 @@ class AddExpenseActivity : AppCompatActivity() {
         val isIncome = binding.radioIncome.isChecked
         val date = calendar.timeInMillis
 
-        // Get current user ID - in a real app, this would come from your auth system
         val userId = 1 // Replace with actual user ID
 
         val transaction = Transaction(
@@ -100,7 +96,7 @@ class AddExpenseActivity : AppCompatActivity() {
             paymentMethod = paymentMethod
         )
 
-        viewModel.addTransaction(transaction)
+        transactionViewModel.addTransaction(transaction)
         finish()
     }
 }

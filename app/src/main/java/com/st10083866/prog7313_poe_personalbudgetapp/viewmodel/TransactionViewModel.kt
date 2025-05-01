@@ -11,20 +11,35 @@ import kotlinx.coroutines.launch
 class TransactionViewModel(application: Application) : AndroidViewModel(application) {
     private val transactionDao = AppDatabase.getDatabase(application).transactionDao()
 
-    //this function returns LiveData of the Transaction (in real time for the UI)
+    // Existing functions
     fun getAllTransactions(userId: Int): LiveData<List<Transaction>> {
         return transactionDao.getAllTransactions(userId)
     }
 
-    //this function adds a new transaction to the database
     fun addTransaction(transaction: Transaction) {
         viewModelScope.launch {
             transactionDao.insert(transaction)
         }
     }
 
-    //this function gets the transactions between specific dates specified by the user
-    fun getTransactionsBetweenDates(userId: Int, from: Long, to: Long): LiveData<List<Transaction>> {
-        return transactionDao.getTransactionsForUserBetweenDates(userId, from, to)
+    // New functions
+    fun getTransactionsForUserBetweenDates(userId: Int, fromDate: Long, toDate: Long): LiveData<List<Transaction>> {
+        return transactionDao.getTransactionsForUserBetweenDates(userId, fromDate, toDate)
+    }
+
+    fun getTotalExpensesBetweenDates(userId: Int, fromDate: Long, toDate: Long): LiveData<Double> {
+        return transactionDao.getTotalExpensesBetweenDates(userId, fromDate, toDate)
+    }
+
+    fun updateTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            transactionDao.update(transaction)
+        }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            transactionDao.delete(transaction)
+        }
     }
 }

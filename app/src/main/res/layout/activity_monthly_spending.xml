@@ -213,11 +213,11 @@
 
                         <!-- Total Spending -->
                         <TextView
+                            android:id="@+id/textTotalSpending"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8dp"
-                            android:text="R12500"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             android:textStyle="bold"/>
@@ -245,10 +245,10 @@
                                 android:textSize="14sp"/>
 
                             <TextView
+                                android:id="@+id/textLeftToSpend"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="R4000"
                                 android:textColor="#000000"
                                 android:textSize="18sp"
                                 android:textStyle="bold"/>
@@ -274,10 +274,10 @@
                                 android:textSize="14sp"/>
 
                             <TextView
+                                android:id="@+id/textMonthlyBudget"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="R6000"
                                 android:textColor="#000000"
                                 android:textSize="18sp"
                                 android:textStyle="bold"/>

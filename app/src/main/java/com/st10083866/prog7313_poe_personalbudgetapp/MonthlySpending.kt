@@ -1,49 +1,70 @@
-// MonthlySpendingActivity.kt
 package com.st10083866.prog7313_poe_personalbudgetapp.activities
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityMonthlySpendingBinding
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodels.MonthlySpendingViewModel
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodels.ViewModelFactory
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.BudgetViewModel
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import java.util.*
 
 class MonthlySpendingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMonthlySpendingBinding
-    private val viewModel: MonthlySpendingViewModel by viewModels { ViewModelFactory(this) }
+    private val budgetViewModel: BudgetViewModel by viewModels()
+    private val transactionViewModel: TransactionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMonthlySpendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get current user ID from your authentication system
-        val userId = getCurrentUserId()
-        observeViewModel(userId)
+        // Get user ID from shared preferences or authentication
+        val userId = getAuthenticatedUserId()
+        setupMonthlySpending(userId)
     }
 
-    private fun observeViewModel(userId: Int) {
+    private fun getAuthenticatedUserId(): Int {
+        // Implement actual user authentication logic
+        // This is just a placeholder
+        return 1
+    }
+
+    private fun setupMonthlySpending(userId: Int) {
         val calendar = Calendar.getInstance()
         val currentMonth = calendar.get(Calendar.MONTH)
         val currentYear = calendar.get(Calendar.YEAR)
 
-        viewModel.getMonthlySpending(userId, currentMonth, currentYear).observe(this) { total ->
-            binding.totalSpendingTextView.text = "R %.2f".format(total)
-        }
+        // Get start and end of month timestamps
+        val (fromDate, toDate) = getMonthStartEndTimestamps(currentMonth, currentYear)
 
-        viewModel.getCurrentMonthBudget(userId).observe(this) { budget ->
+        // Observe total spending
+        transactionViewModel.getTotalExpensesBetweenDates(userId, fromDate, toDate)
+            .observe(this) { total ->
+                binding.textTotalSpending.text = "R %.2f".format(total)
+            }
+
+        // Observe budget data
+        budgetViewModel.getCurrentMonthBudget(userId).observe(this) { budget ->
             budget?.let {
-                binding.monthlyBudgetTextView.text = "R %.2f".format(it.limitAmount)
+                binding.textMonthlyBudget.text = "R %.2f".format(it.limitAmount)
                 val leftToSpend = it.limitAmount - it.spentAmount
-                binding.leftToSpendTextView.text = "R %.2f".format(leftToSpend)
+                binding.textLeftToSpend.text = "R %.2f".format(leftToSpend)
             }
         }
     }
 
-    private fun getCurrentUserId(): Int {
-        // Implement your actual user ID retrieval logic
-        return 1 // Replace with real implementation
+    private fun getMonthStartEndTimestamps(month: Int, year: Int): Pair<Long, Long> {
+        val startCalendar = Calendar.getInstance().apply {
+            set(year, month, 1, 0, 0, 0)
+        }
+        val start = startCalendar.timeInMillis
+
+        val endCalendar = Calendar.getInstance().apply {
+            set(year, month, 1, 23, 59, 59)
+            set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
+        }
+        val end = endCalendar.timeInMillis
+
+        return Pair(start, end)
     }
 }

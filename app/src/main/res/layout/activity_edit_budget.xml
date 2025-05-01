@@ -8,21 +8,12 @@
     tools:context=".EditBudget">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:elevation="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
-            app:navigationIcon="@drawable/ic_menu"
-            app:title="Edit Budget"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
-            app:titleTextColor="#000000" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -39,11 +30,11 @@
             <!-- Total Budget Input -->
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="69dp"
                 android:layout_marginBottom="4dp"
                 android:text="Enter Total Budget"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="28sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -61,15 +52,14 @@
                         android:id="@+id/currencyLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="16dp"
                         android:text="R"
                         android:textColor="#000000"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.551" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/totalBudgetInput"
@@ -109,25 +99,20 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@drawable/gradient_background"><![CDATA[
-
-                    ("parent")
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                    ]]>
+                    android:background="@drawable/gradient_background">
 
                     <TextView
                         android:id="@+id/currencyLabel2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
                         android:text="R"
                         android:textColor="#000000"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf
-                        tools:layout_editor_absoluteX="4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/spendingLimitInput"
@@ -194,7 +179,7 @@
                         android:id="@+id/deleteButton"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:background="@drawable/delete_button_background"
+                        android:background="#FF0000"
                         android:clickable="true"
                         android:focusable="true">
 
@@ -202,7 +187,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Delete"
-                            android:textColor="#FFFFFF"
+                            android:textColor="#000000"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"

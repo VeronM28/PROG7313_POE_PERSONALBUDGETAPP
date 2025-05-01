@@ -11,12 +11,9 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityEditCategoryBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 
 class EditCategoryActivity : AppCompatActivity() {

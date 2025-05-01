@@ -19,63 +19,43 @@ class CategoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoryBinding
     private val categoryViewModel: CategoryViewModel by viewModels()
-
+    private var userId: Int = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_category)
 
-        binding = ActivityCategoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val userId = intent.getIntExtra("USER_ID", -1)
-        if (userId == -1) {
-            Toast.makeText(this, "Invalid user. Cannot save category.", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+        userId = intent.getIntExtra("USER_ID", -1)
 
         binding.btnAddCategory.setOnClickListener {
-
             val name = binding.etCategoryName.text.toString()
             val description = binding.etDesc.text.toString()
-            val limitText = binding.etLimit.text.toString()
-            val selectedSpendType = binding.typeToggleGroup.checkedButtonId
+            val limit = binding.etLimit.text.toString().toDoubleOrNull()
+            val type = if (binding.typeToggleGroup.checkedButtonId == R.id.incomeButton) "Income" else "Expense"
 
-            val spendType = when (selectedSpendType) {
-                R.id.incomeButton -> true  // income
-                R.id.expenseButton -> false // expense
-                else -> {
-                    Toast.makeText(this, "Please select income or expense.", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-            }
-            if (name.isBlank() || description.isBlank() || limitText.isBlank() || spendType) {
-                Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_SHORT).show()
+            if (name.isBlank() || description.isBlank() || limit == null) {
+                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val catLimit = limitText.toDoubleOrNull()
-            if (catLimit == null) {
-                Toast.makeText(this, "Limit must be a number.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val category = Category(
+            val newCategory = Category(
                 userOwnerId = userId,
                 name = name,
                 description = description,
-                limit = catLimit,
-                spendType = spendType
+                limit = limit,
+                spendType = type
             )
 
-            categoryViewModel.insertCategory(category)
+            categoryViewModel.addCategory(newCategory)
 
-            Toast.makeText(this, "Category saved!", Toast.LENGTH_SHORT).show()
-            finish() // go back to previous screen
+            Toast.makeText(this, "Category added successfully!", Toast.LENGTH_SHORT).show()
+            finish() // Go back or move to the next screen
         }
+
+
     }
 }
 

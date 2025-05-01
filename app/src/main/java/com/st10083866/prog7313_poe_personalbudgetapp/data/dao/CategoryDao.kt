@@ -10,18 +10,8 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category: Category)
 
-    @Query("SELECT * FROM categories")
-    suspend fun getAllCategories(): LiveData<List<Category>>
-
-    @Query("SELECT * FROM categories WHERE id = :categoryId")
-    suspend fun getCategoryById(categoryId: Int): Category?
-
     @Query("SELECT * FROM categories WHERE userOwnerId = :userId")
-    suspend fun getCategoriesForUser(userId: Int): Flow<List<Category>>
+    suspend fun getCategoriesForUser(userId: Int): List<Category>
 
-    @Delete
-    suspend fun deleteCategory(category: Category)
 
-    @Update
-    suspend fun updateCategory(category: Category)
 }

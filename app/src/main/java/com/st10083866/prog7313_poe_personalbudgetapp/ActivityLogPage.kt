@@ -1,7 +1,12 @@
 package com.st10083866.prog7313_poe_personalbudgetapp
 
 import android.app.DatePickerDialog
+import android.app.DownloadManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLogPageBinding
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.ActivityLogAdapter
+import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogAdapter
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -26,16 +31,31 @@ class ActivityLogPage : AppCompatActivity() {
     private var toDate: String = ""
     private var userId: Int = 1
 
-
+    //this function initializes the screen layout and logic for how the screen elements behave
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_log_page)
 
-        adapter = ActivityLogAdapter()
+        //displays all transaction logs
+        adapter = ActivityLogAdapter(
+            onEditClick = { transactions ->
+                val intent = Intent(this, EditSpending::class.java)
+                intent.putExtra("TRANSACTION_ID", transactions.id)
+                startActivity(intent)
+            },
+            onDownloadClick = { transactions ->
+                if (!transactions.uploadedPicturePath.isNullOrEmpty()) {
+                    downloadImageFromUrl(transactions.uploadedPicturePath!!)
+                }else{
+                    Toast.makeText(this, "No image uploaded for this transaction", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
         binding.activityLogRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.activityLogRecyclerView.adapter = adapter
 
+        //opens date pickers
         binding.edtStartDate.setOnClickListener {
             showDatePicker { date ->
                 fromDate = date
@@ -49,7 +69,7 @@ class ActivityLogPage : AppCompatActivity() {
                 binding.edtEndDate.setText(formatDisplayDate(date))
             }
         }
-
+        //updates logs when button is pressed
         binding.btnUpdateLogs.setOnClickListener {
             if (fromDate.isNotEmpty() && toDate.isNotEmpty()) {
                 val fromMillis = parseDateToMillis(fromDate)
@@ -92,4 +112,19 @@ class ActivityLogPage : AppCompatActivity() {
             isoDate
         }
     }
+
+
+    //this function will use the user's system's download manager to save the image
+    private fun downloadImageFromUrl(imageUrl: String) {
+        val request = DownloadManager.Request(Uri.parse(imageUrl))
+            .setTitle("Transaction Image")
+            .setDescription("Downloading attached image")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setAllowedOverMetered(true)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "transaction_image.jpg")
+
+        val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        dm.enqueue(request)
+    }
+
 }

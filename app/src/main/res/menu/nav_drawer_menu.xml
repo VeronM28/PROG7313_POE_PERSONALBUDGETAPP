@@ -4,18 +4,48 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_savings"
-            android:title="Savings Contributions"
-            android:icon="@drawable/ic_savings" />
+            android:id="@+id/navCreateSavingsContribution"
+            android:title="Add Savings Contributions" />
 
         <item
-            android:id="@+id/nav_goals"
+            android:id="@+id/navSavingGoals"
             android:title="Savings Goals"
             android:icon="@drawable/ic_savings" />
 
         <item
-            android:id="@+id/nav_settings"
-            android:title="Profile Page" />
+            android:id="@+id/navEditProfilePage"
+            android:title="Edit Profile Page" />
+
+        <item
+            android:id="@+id/navAddSavingGoal"
+            android:title="Create Savings Goal" />
+
+        <item
+            android:id="@+id/navAddCategory"
+            android:title="Add Category" />
+
+        <item
+            android:id="@+id/navCreateBudget"
+            android:title="Create Budget" />
+
+
+        <item
+            android:id="@+id/navEditBudget"
+            android:title="Edit Budget" />
+
+        <item
+            android:id="@+id/navExpenses"
+            android:title="Expenses" />
+
+        <item
+            android:id="@+id/navMonthlySpending"
+            android:title="Monthly Spending" />
+
+        <item
+            android:id="@+id/navLogPage"
+            android:title="Spending Logs" />
+
+
 
     </group>
 </menu>

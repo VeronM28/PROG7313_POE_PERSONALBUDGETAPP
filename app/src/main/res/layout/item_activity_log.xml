@@ -26,27 +26,39 @@
 
         <!-- Details -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="193dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/transactionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Salary"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/transactionDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10 March 2025"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Image" />
+
+            <Button
+                android:id="@+id/btnEditEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Entry" />
         </LinearLayout>
 
         <!-- Amount and Type -->
@@ -71,6 +83,7 @@
                 android:text="In Cash"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

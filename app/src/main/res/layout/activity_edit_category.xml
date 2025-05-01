@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.category.EditCategoryActivity"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="360dp"
+        android:layout_height="100dp"
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Category"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+                <!-- Category Dropdown -->
+                <Spinner
+                    android:id="@+id/spinnerCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="Select Category"
+                    android:background="@drawable/gradient_background"/>
+
+                <!-- Editable Fields -->
+                <EditText
+                    android:id="@+id/etEditCategoryName"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:hint="Category Name"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/gradient_background"/>
+
+                <EditText
+                    android:id="@+id/etEditDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:hint="Description"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/gradient_background"/>
+
+                <EditText
+                    android:id="@+id/etEditLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:hint="R (Limit)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/gradient_background"/>
+
+                <!-- Spend Type Toggle -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/typeToggleGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_background"
+                    style="@style/RoundedToggleButton"
+                    android:layout_gravity="center"
+                    app:singleSelection="true"
+                    app:checkedButton="@id/incomeButton"
+                    android:layout_marginTop="38dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/incomeButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Income"
+                        android:checkable="true"
+                        android:checked="true" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/expenseButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expenses"
+                        android:checkable="true" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <!-- Buttons -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddCategory"
+                    android:layout_width="180dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/gradient_background"
+                    android:backgroundTint="@null"
+                    android:text="Edit Category"
+                    android:visibility="visible"
+                    app:backgroundTint="@null"
+                    app:cornerRadius="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="145dp"
+                    android:layout_height="55dp"
+                    android:background="@color/red"
+                    android:backgroundTint="@null"
+                    android:text="Delete"
+                    android:visibility="visible"
+                    app:backgroundTint="@null"
+                    app:cornerRadius="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"/>
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

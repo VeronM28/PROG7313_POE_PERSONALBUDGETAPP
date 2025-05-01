@@ -12,77 +12,70 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityCategoryBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 
 class CategoryActivity : AppCompatActivity() {
 
-    private lateinit var etCategoryName : EditText
-    private lateinit var etDesc : EditText
-    private lateinit var etLimit : EditText
-    private lateinit var typeToggleGroup: MaterialButtonToggleGroup
-    private lateinit var btnAddCategory: MaterialButton
-
+    private lateinit var binding: ActivityCategoryBinding
     private val categoryViewModel: CategoryViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_category)
 
-        etCategoryName = findViewById(R.id.etCategoryName)
-        etDesc = findViewById(R.id.etDesc)
-        etLimit = findViewById(R.id.etLimit)
-        btnAddCategory = findViewById(R.id.btnAddCategory)
-        typeToggleGroup = findViewById(R.id.typeToggleGroup)
+        binding = ActivityCategoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        typeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.incomeButton -> {
-                        // Set category type to INCOME
-                    }
-                    R.id.expenseButton -> {
-                        // Set category type to EXPENSE
-                    }
+        val userId = intent.getIntExtra("USER_ID", -1)
+        if (userId == -1) {
+            Toast.makeText(this, "Invalid user. Cannot save category.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        binding.btnAddCategory.setOnClickListener {
+
+            val name = binding.etCategoryName.text.toString()
+            val description = binding.etDesc.text.toString()
+            val limitText = binding.etLimit.text.toString()
+            val selectedSpendType = binding.typeToggleGroup.checkedButtonId
+
+            val spendType = when (selectedSpendType) {
+                R.id.incomeButton -> true  // income
+                R.id.expenseButton -> false // expense
+                else -> {
+                    Toast.makeText(this, "Please select income or expense.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
             }
-        }
-        btnAddCategory.setOnClickListener {
-            val name = etCategoryName.text.toString().trim()
-            val description = etDesc.text.toString().trim()
-            val limitText = etLimit.text.toString().trim()
-
-            if (name.isEmpty() || description.isEmpty() || limitText.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            if (name.isBlank() || description.isBlank() || limitText.isBlank() || spendType) {
+                Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val limit = limitText.toDoubleOrNull()
-            if (limit == null) {
-                Toast.makeText(this, "Invalid limit amount", Toast.LENGTH_SHORT).show()
+            val catLimit = limitText.toDoubleOrNull()
+            if (catLimit == null) {
+                Toast.makeText(this, "Limit must be a number.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val isIncome = typeToggleGroup.checkedButtonId == R.id.incomeButton
-            val categoryType = if (isIncome) "Income" else "Expense"
-
-            // Replace with actual user ID from session/auth
-            val userId = 1
-
-            val newCategory = Category(
+            val category = Category(
                 userOwnerId = userId,
                 name = name,
                 description = description,
-                limit = limit,
-                isIncome = isIncome
-
+                limit = catLimit,
+                spendType = spendType
             )
 
-            categoryViewModel.addCategory(newCategory)
+            categoryViewModel.insertCategory(category)
 
-            Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show()
-            finish()
+            Toast.makeText(this, "Category saved!", Toast.LENGTH_SHORT).show()
+            finish() // go back to previous screen
         }
     }
-
 }
+

@@ -32,7 +32,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <!-- this is the toatl budget entries-->
     <EditText
         android:id="@+id/etTotalBudget"
         android:layout_width="match_parent"

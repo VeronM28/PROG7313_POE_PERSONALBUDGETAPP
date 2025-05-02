@@ -2,6 +2,7 @@ package com.st10083866.prog7313_poe_personalbudgetapp.ui.home
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -115,6 +116,18 @@ class MainPageActivity : AppCompatActivity() {
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
         }
+
+        setSupportActionBar(binding.toolbar) // set toolbar for action bar
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
 

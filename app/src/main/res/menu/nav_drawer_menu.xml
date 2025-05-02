@@ -5,7 +5,8 @@
 
         <item
             android:id="@+id/navCreateSavingsContribution"
-            android:title="Add Savings Contributions" />
+            android:title="Add Savings Contributions"
+            android:icon="@drawable/ic_savings"/>
 
         <item
             android:id="@+id/navSavingGoals"
@@ -18,15 +19,18 @@
 
         <item
             android:id="@+id/navAddSavingGoal"
-            android:title="Create Savings Goal" />
+            android:title="Create Savings Goal"
+            android:icon="@drawable/ic_savings"/>
 
         <item
             android:id="@+id/navAddCategory"
-            android:title="Add Category" />
+            android:title="Add Category"
+            android:icon="@drawable/ic_savings"/>
 
         <item
             android:id="@+id/navCreateBudget"
-            android:title="Create Budget" />
+            android:title="Create Budget"
+            android:icon="@drawable/ic_savings"/>
 
 
         <item

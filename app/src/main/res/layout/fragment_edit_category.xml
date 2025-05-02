@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.category.EditCategoryFragment"
     android:orientation="vertical">
+    <!-- this is the Edit Category Fragment -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
@@ -16,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
         android:layout_gravity="center">
-
+        <!-- this is this edit catergory heading -->
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <!-- this is the size edits -->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

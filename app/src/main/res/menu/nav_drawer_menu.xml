@@ -34,14 +34,6 @@
             android:title="Edit Budget" />
 
         <item
-            android:id="@+id/navExpenses"
-            android:title="Expenses" />
-
-        <item
-            android:id="@+id/navMonthlySpending"
-            android:title="Monthly Spending" />
-
-        <item
             android:id="@+id/navLogPage"
             android:title="Spending Logs" />
 

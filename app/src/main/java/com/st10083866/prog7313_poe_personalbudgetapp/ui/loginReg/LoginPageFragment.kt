@@ -57,7 +57,7 @@ class LoginPageFragment : Fragment() {
                         Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
 
                         val session = SessionManager(requireContext())
-                        session.saveUserId(user.userId.toLong())
+                        session.saveUserId(user.userId.toInt())
 
                         val intent = Intent(requireContext(), MainPageActivity::class.java)
                         intent.putExtra("USER_ID", user.userId)

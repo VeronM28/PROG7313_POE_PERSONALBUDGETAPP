@@ -19,8 +19,8 @@
 
         <TextView
             android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="Edit Budget"
             android:textColor="#000000"
             android:textSize="30sp"
@@ -35,29 +35,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="531dp"
         android:orientation="vertical">
 
 
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="20dp">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <!-- Category Dropdown -->
                 <Spinner
                     android:id="@+id/spinnerEditBudget"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:prompt="@string/select_budget"
-                    android:background="@drawable/gradient_background"/>
+                    android:layout_height="65dp"
+                    android:background="@drawable/gradient_background"
+                    android:prompt="@string/select_budget" />
 
                 <!-- Editable Fields -->
 
@@ -65,53 +64,53 @@
                     android:id="@+id/etEditTotalBudget"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:hint="Total Budget (R)"
                     android:layout_marginTop="25dp"
-                    android:background="@drawable/gradient_background"/>
+                    android:background="@drawable/gradient_background"
+                    android:hint="Total Budget (R)" />
 
                 <EditText
                     android:id="@+id/etEditSpendLimit"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:hint="Spend Limit (R)"
-                    android:inputType="numberDecimal"
                     android:layout_marginTop="25dp"
-                    android:background="@drawable/gradient_background"/>
+                    android:background="@drawable/gradient_background"
+                    android:hint="Spend Limit (R)"
+                    android:inputType="numberDecimal" />
 
                 <Spinner
                     android:id="@+id/spinnerEditBudgetCat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:prompt="@string/select_category"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/gradient_background"
-                    android:layout_marginTop="25dp"/>
+                    android:prompt="@string/select_category" />
 
                 <!-- Buttons -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnEditBudget"
                     android:layout_width="180dp"
                     android:layout_height="55dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/gradient_background"
                     android:backgroundTint="@null"
                     android:text="Edit Budget"
                     android:visibility="visible"
                     app:backgroundTint="@null"
-                    app:cornerRadius="50dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="30dp"/>
+                    app:cornerRadius="50dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDelete"
                     android:layout_width="145dp"
                     android:layout_height="55dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
                     android:background="@color/red"
                     android:backgroundTint="@null"
                     android:text="Delete"
                     android:visibility="visible"
                     app:backgroundTint="@null"
-                    app:cornerRadius="50dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="30dp"/>
+                    app:cornerRadius="50dp" />
 
 
             </LinearLayout>

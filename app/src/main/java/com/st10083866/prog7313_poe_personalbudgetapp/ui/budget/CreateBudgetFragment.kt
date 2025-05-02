@@ -33,7 +33,7 @@ class CreateBudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val etTotalBudget = view.findViewById<EditText>(R.id.etTotalBudget)
         val etSpendLimit = view.findViewById<EditText>(R.id.etSpendLimit)
-        val btnAddBudget = view.findViewById<Button>(R.id.addBudgetButton)
+        val btnaddBudgetButton = view.findViewById<Button>(R.id.addBudgetButton)
         budgetSpinner = view.findViewById(R.id.categorySpinner)
 
         viewModel = ViewModelProvider(this)[BudgetViewModel::class.java]
@@ -57,7 +57,7 @@ class CreateBudgetFragment : Fragment() {
             }
         }
 
-        btnAddBudget.setOnClickListener {
+        btnaddBudgetButton.setOnClickListener {
             val total = etTotalBudget.text.toString().toDoubleOrNull()
             val limit = etSpendLimit.text.toString().toDoubleOrNull()
             val categoryId = selectedCategoryId
@@ -71,4 +71,5 @@ class CreateBudgetFragment : Fragment() {
             }
         }
     }
+
 }

@@ -18,6 +18,8 @@ class LaunchPageActivity : AppCompatActivity() {
         binding = ActivityLaunchpageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val prefs = getSharedPreferences("session", MODE_PRIVATE)
+        prefs.edit().clear().apply()
         val session = SessionManager(this)
 
         // If the user is already logged in, they will go to MainPageActivity

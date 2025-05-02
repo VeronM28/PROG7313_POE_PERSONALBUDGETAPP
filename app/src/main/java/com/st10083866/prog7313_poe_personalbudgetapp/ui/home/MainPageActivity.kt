@@ -40,7 +40,7 @@ class MainPageActivity : AppCompatActivity() {
 
         //loads userID from saved session
         val session = SessionManager(this)
-        userId = intent.getIntExtra("USER_ID", session.getUserId())
+        userId = intent.getIntExtra("USER_ID", session.getUserId().toInt())
 
         //default fragment
         loadFragment(HomeFragment().withUser(userId))
@@ -86,10 +86,10 @@ class MainPageActivity : AppCompatActivity() {
                     true
                 }
                 else -> false
-                }.also{
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                }
+            }.also{
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
+        }
 
         // Bottom Navigation item clicks
         binding.bottomNavigation.setOnItemSelectedListener { item ->

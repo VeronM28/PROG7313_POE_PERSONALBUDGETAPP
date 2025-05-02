@@ -71,7 +71,7 @@ class RegPageFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            val insertedId: Long = db.userDao().insertUser(user)
+            val insertedId: Int = db.userDao().insertUser(user).toInt()
 
             val session = SessionManager(requireContext())
             session.saveUserId(insertedId)

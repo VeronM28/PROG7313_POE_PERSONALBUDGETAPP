@@ -6,12 +6,12 @@ import android.content.SharedPreferences
 class SessionManager(context: Context) {
 
 
-    private val prefs: SharedPreferences = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
 
-    fun saveUserId(userId: Long) {
-        val editor = prefs.edit()
-            editor.putLong("USER_ID", userId)
-            editor.apply()
+    fun saveUserId(userId: Int) {
+        val editor = prefs.edit().putInt("USER_ID", userId)
+        editor.apply()
     }
 
     fun getUserId(): Int {

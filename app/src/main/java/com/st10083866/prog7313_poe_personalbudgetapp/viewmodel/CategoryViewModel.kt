@@ -27,6 +27,10 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             categoryDao.insertCategory(category)
         }
     }
+    fun getCategoriesForUser(userId: Int): LiveData<List<Category>> {
+         return  categoryDao.getCategoriesForUser(userId)
+    }
+
     fun insertCategory(category: Category) = viewModelScope.launch {
         repository.insertCategory(category)
     }

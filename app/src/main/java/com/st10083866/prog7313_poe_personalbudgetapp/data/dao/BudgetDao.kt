@@ -6,9 +6,15 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
 
 @Dao
 interface BudgetDao {
-    @Insert
-    suspend fun insert(budget: Budget)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBudget(budget: Budget)
 
-    @Query("SELECT * FROM budgets WHERE userOwnerId = :userId")
-    fun getBudget(userId: Int): LiveData<List<Budget>>
+    @Update
+    suspend fun updateBudget(budget: Budget)
+
+    @Delete
+    suspend fun deleteBudget(budget: Budget)
+
+    @Query("SELECT * FROM budgets")
+    fun getAllBudgets(): LiveData<List<Budget>>
 }

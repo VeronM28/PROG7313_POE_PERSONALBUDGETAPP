@@ -1,5 +1,6 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.st10083866.prog7313_poe_personalbudgetapp.R
+import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.User
 import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentRegPageBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
 import kotlinx.coroutines.launch
 
 class RegPageFragment : Fragment() {
@@ -70,7 +73,13 @@ class RegPageFragment : Fragment() {
         lifecycleScope.launch {
             db.userDao().insertUser(user)
 
-            // Switch to login screen (adjust based on your navigation)
+            val session = SessionManager(requireContext())
+            session.saveUserId(user.userId) // Save the actual userId
+
+            val intent = Intent(requireContext(), MainPageActivity::class.java)
+            intent.putExtra("USER_ID", user.userId)
+            startActivity(intent)
+            requireActivity().finish()
 
         }
     }

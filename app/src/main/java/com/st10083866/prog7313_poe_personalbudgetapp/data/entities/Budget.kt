@@ -22,9 +22,7 @@ import androidx.room.ForeignKey
 data class Budget(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val userOwnerId: Int,
-    val month: String,
-    val year: String,
-    val categoryId: Int?,
-    val limitAmount: Double,
-    val spentAmount: Double
+    val totalAmount: Double,
+    val spendingLimit: Double,
+    val categoryId: Int
 )

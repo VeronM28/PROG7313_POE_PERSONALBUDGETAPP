@@ -5,21 +5,25 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
 import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
+import com.st10083866.prog7313_poe_personalbudgetapp.repository.BudgetRepository
 import kotlinx.coroutines.launch
 
 class BudgetViewModel(application: Application) : AndroidViewModel(application) {
-    private val budgetDao = AppDatabase.getDatabase(application).budgetDao()
+    private val repository: BudgetRepository
 
-    //this function fetches all the budgets
-    fun getBudget(userId: Int): LiveData<List<Budget>> {
-            return budgetDao.getBudget(userId)
+    val allCategories: LiveData<List<Category>>
+
+
+    init {
+        val db = AppDatabase.getDatabase(application)
+        repository = BudgetRepository(db.budgetDao(), db.categoryDao())
+        allCategories = repository.getAllCategories()
     }
 
-    //this function adds a new budget
-    fun addBudget(budget: Budget) {
-        viewModelScope.launch {
-            budgetDao.insert(budget)
-        }
+    fun insertBudget(budget: Budget) = viewModelScope.launch {
+        repository.insertBudget(budget)
     }
+
 }

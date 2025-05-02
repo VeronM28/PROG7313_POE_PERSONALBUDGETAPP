@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.category.CategoryFragment"
     android:orientation="vertical">
-
+    <!-- this is the Category fix -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="360dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="20dp"
         android:layout_gravity="center">
-
+        <!-- this is the Category heading at the top-->
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"

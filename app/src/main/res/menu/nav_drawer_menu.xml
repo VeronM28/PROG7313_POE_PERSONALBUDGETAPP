@@ -6,41 +6,41 @@
         <item
             android:id="@+id/navCreateSavingsContribution"
             android:title="Add Savings Contributions" />
-
+        <!-- this is the create savings contribution page -->
         <item
             android:id="@+id/navSavingGoals"
             android:title="Savings Goals"
             android:icon="@drawable/ic_savings" />
-
+        <!-- this is the savings goal page -->
         <item
             android:id="@+id/navEditProfilePage"
             android:title="Edit Profile Page" />
-
+        <!-- this is the edit profile page -->
         <item
             android:id="@+id/navAddSavingGoal"
             android:title="Create Savings Goal" />
-
+        <!-- this add saving goal page  -->
         <item
             android:id="@+id/navAddCategory"
             android:title="Add Category" />
-
+        <!-- this is the add category page-->
         <item
             android:id="@+id/navCreateBudget"
             android:title="Create Budget" />
-
+        <!-- this is the create budget page -->
 
         <item
             android:id="@+id/navEditBudget"
             android:title="Edit Budget" />
-
+        <!-- this is the edit budget page -->
         <item
             android:id="@+id/navLogPage"
             android:title="Spending Logs" />
-
+        <!-- this is the Log Page -->
         <item
             android:id="@+id/navEditCategory"
             android:title="Edit Category" />
-
+        <!-- this is the edit category page -->
 
 
 

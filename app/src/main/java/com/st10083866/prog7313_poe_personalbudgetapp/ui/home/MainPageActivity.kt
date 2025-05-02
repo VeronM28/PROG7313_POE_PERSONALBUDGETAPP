@@ -10,126 +10,106 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.R
+import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityMainPageBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.BudgetOverview
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.CreateBudget
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.EditBudget
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.category.CategoryFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.category.EditCategoryFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.profile.EditProfileFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.profile.ProfileFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.savings.CreateSavingsContributionFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.savings.CreateSavingsGoalFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.savings.SavingsGoalFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.AddExpensesFragment
 
 class MainPageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainPageBinding
     private var userId: Int = -1
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navigationView: NavigationView
-    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        binding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        userId = intent.getIntExtra("USER_ID", -1)
+        //loads userID from saved session
+        val session = SessionManager(this)
+        userId = intent.getIntExtra("USER_ID", session.getUserId())
 
         //default fragment
-        loadFragment(HomeFragment().apply {
-            arguments = Bundle().apply { putInt("USER_ID", userId) }
-        })
+        loadFragment(HomeFragment().withUser(userId))
 
-        // Bottom nav item clicks
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
+        // Drawer item clicks
+        binding.navigationDrawer.setNavigationItemSelectedListener  { menuitem ->
+            when (menuitem.itemId) {
                 R.id.navCreateSavingsContribution -> {
-                    loadFragment(CreateSavingsContributionFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(CreateSavingsContributionFragment().withUser(userId))
                     true
                 }
                 R.id.navSavingGoals -> {
-                    loadFragment(SavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(SavingsGoalFragment().withUser(userId))
                     true
                 }
                 R.id.navAddSavingGoal -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(CreateSavingsGoalFragment().withUser(userId))
                     true
                 }
                 R.id.navEditProfilePage -> {
-                    loadFragment(EditProfileFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(EditProfileFragment().withUser(userId))
                     true
                 }
                 R.id.navAddCategory -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(CategoryFragment().withUser(userId))
                     true
                 }
                 R.id.navEditCategory -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+
+                    loadFragment(EditCategoryFragment().withUser(userId))
                     true
                 }
                 R.id.navCreateBudget -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(CreateBudget().withUser(userId))
                     true
-                }
+                } //needs changing
                 R.id.navEditBudget -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(EditBudget().withUser(userId))
                     true
-                }
-                R.id.navExpenses -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
-                    true
-                }
-                R.id.navMonthlySpending -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
-                    true
-                }
+                } //needs changing
                 R.id.navLogPage -> {
-                    loadFragment(CreateSavingsGoalFragment().apply {
-                        arguments = Bundle().apply { putInt("USER_ID", userId) }
-                    })
+                    loadFragment(ActivityLogFragment().withUser(userId))
                     true
                 }
                 else -> false
+                }.also{
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                }
             }
-        }
 
-        // Drawer item clicks
-        binding.navigationDrawer.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_profile -> {
-                    finish()
-                    true
-                }
+        // Bottom Navigation item clicks
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.nav_home -> {
-
+                    loadFragment(HomeFragment().withUser(userId))
                     true
                 }
-                R.id.nav_budget -> {
-
+                R.id.nav_profile -> {
+                    loadFragment(ProfileFragment().withUser(userId))
                     true
                 }
                 R.id.nav_addEntry -> {
-
+                    loadFragment(AddExpensesFragment().withUser(userId))
                     true
                 }
+                R.id.nav_budget -> {
+                    loadFragment(BudgetOverview().withUser(userId))
+
+                    true
+                } //needs changing
                 else -> false
             }.also {
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -141,4 +121,9 @@ class MainPageActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
+    fun Fragment.withUser(userId: Int): Fragment {
+        arguments = Bundle().apply { putInt("USER_ID", userId) }
+        return this
+    }
+
 }

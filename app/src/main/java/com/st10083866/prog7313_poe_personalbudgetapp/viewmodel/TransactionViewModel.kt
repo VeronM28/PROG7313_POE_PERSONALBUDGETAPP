@@ -27,4 +27,17 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     fun getTransactionsBetweenDates(userId: Int, from: Long, to: Long): LiveData<List<Transaction>> {
         return transactionDao.getTransactionsForUserBetweenDates(userId, from, to)
     }
+
+    //this function updates the transaction
+    fun updateTransaction(transaction: Transaction) = viewModelScope.launch {
+        transactionDao.updateTransaction(transaction)
+    }
+
+    //this function deletes the transaction
+    fun deleteTransactionById(id: Int) = viewModelScope.launch {
+        transactionDao.deleteTransactionById(id)
+    }
+
+    //this function gets a specific transaction
+    fun getTransactionById(id: Int): LiveData<Transaction> = transactionDao.getTransactionById(id)
 }

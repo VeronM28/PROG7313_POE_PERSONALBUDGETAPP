@@ -15,28 +15,28 @@
 
         
         <activity
-            android:name=".BudgetOverview"
+            android:name=".ui.budget.BudgetOverview"
             android:exported="false" />
         <activity
             android:name=".Dashboard"
             android:exported="false" />
         <activity
-            android:name=".EditBudget"
+            android:name=".ui.budget.EditBudget"
             android:exported="false" />
         <activity
-            android:name=".CreateBudget"
+            android:name=".ui.budget.CreateBudget"
             android:exported="false" />
         <activity
-            android:name=".MonthlySpending"
+            android:name=".ui.transactions.MonthlySpending"
             android:exported="false" />
         <activity
             android:name=".Expenses"
             android:exported="false" />
         <activity
-            android:name=".EditSpending"
+            android:name=".ui.transactions.EditSpending"
             android:exported="false" />
         <activity
-            android:name=".AddExpense"
+            android:name=".ui.transactions.AddExpense"
             android:exported="false" />
 
 

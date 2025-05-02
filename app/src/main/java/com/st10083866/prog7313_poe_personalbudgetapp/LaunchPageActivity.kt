@@ -8,7 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLaunchpageBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.LoginPageFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.RegPageFragment
 
@@ -19,21 +21,32 @@ class LaunchPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_launchpage)
         binding = ActivityLaunchpageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnLaunchLogin.setOnClickListener {
-            val intent = Intent(this, LoginPageFragment::class.java)
+        val session = SessionManager(this)
+
+        if (session.isLoggedIn()) {
+            val intent = Intent(this, MainPageActivity::class.java)
+            intent.putExtra("USER_ID", session.getUserId())
             startActivity(intent)
+            finish()
+            return
+        }
+
+        binding.btnLaunchLogin.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, LoginPageFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.btnLaunchReg.setOnClickListener {
-            val intent = Intent(this, RegPageFragment::class.java)
-            startActivity(intent)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, RegPageFragment())
+                .addToBackStack(null)
+                .commit()
         }
-
-
-
     }
+
 }

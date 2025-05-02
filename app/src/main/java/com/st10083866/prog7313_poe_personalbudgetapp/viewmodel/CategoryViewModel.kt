@@ -41,10 +41,6 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         repository.deleteCategory(category)
     }
 
-    fun getCategoriesForUser(userId: Int): LiveData<List<Category>> {
-            return categoryDao.getCategoriesForUser(userId)
-        }
-
 
 
 

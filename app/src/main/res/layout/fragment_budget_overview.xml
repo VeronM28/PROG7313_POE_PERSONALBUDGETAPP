@@ -40,7 +40,7 @@
         android:layout_marginTop="100dp">
 
         <TextView
-            android:id="@+id/tv_total_balance"
+            android:id="@+id/txtTotal"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="R 0.00"

@@ -15,8 +15,11 @@ import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityMainPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.BudgetOverview
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.BudgetOverviewFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.CreateBudget
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.CreateBudgetFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.EditBudget
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.EditBudgetFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.category.CategoryFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.category.EditCategoryFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.profile.EditProfileFragment
@@ -73,13 +76,13 @@ class MainPageActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navCreateBudget -> {
-                    loadFragment(CreateBudget().withUser(userId))
+                    loadFragment(CreateBudgetFragment().withUser(userId))
                     true
-                } //needs changing
+                }
                 R.id.navEditBudget -> {
-                    loadFragment(EditBudget().withUser(userId))
+                    loadFragment(EditBudgetFragment().withUser(userId))
                     true
-                } //needs changing
+                }
                 R.id.navLogPage -> {
                     loadFragment(ActivityLogFragment().withUser(userId))
                     true
@@ -106,10 +109,10 @@ class MainPageActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_budget -> {
-                    loadFragment(BudgetOverview().withUser(userId))
+                    loadFragment(BudgetOverviewFragment().withUser(userId))
 
                     true
-                } //needs changing
+                }
                 else -> false
             }.also {
                 binding.drawerLayout.closeDrawer(GravityCompat.START)

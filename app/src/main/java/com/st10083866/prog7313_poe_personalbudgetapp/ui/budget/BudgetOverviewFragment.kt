@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentBudgetOverviewBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.BudgetViewModel
@@ -41,9 +42,9 @@ class BudgetOverviewFragment : Fragment() {
                 val totalBalance = transactions.sumOf {
                     if (it.type == "income") it.amount else -it.amount
                 }
-                binding.txtBalance.text = "R %.2f".format(totalBalance)
+                binding.txtTotal.text = "R %.2f".format(totalBalance)
 
-                binding.categoryContainer.removeAllViews()
+                binding.contributionsRecyclerView.removeAllViews()
 
                 val categorySums = mutableMapOf<Int, Double>()
 
@@ -60,11 +61,11 @@ class BudgetOverviewFragment : Fragment() {
                     val amount = categorySums[category.id] ?: 0.0
                     val percent = if (totalExpenses > 0) (amount / totalExpenses) * 100 else 0.0
 
-                    val view = layoutInflater.inflate(R.layout.item_category_summary, binding.categoryContainer, false)
+                    val view = layoutInflater.inflate(R.layout.item_category_summary, binding.contributionsRecyclerView, false)
                     view.findViewById<TextView>(R.id.txtCategoryName).text = category.name
                     view.findViewById<TextView>(R.id.txtAmount).text = "R %.2f".format(amount)
                     view.findViewById<TextView>(R.id.txtPercent).text = "%.0f%%".format(percent)
-                    binding.categoryContainer.addView(view)
+                    binding.contributionsRecyclerView.addView(view)
                 }
             }
         }

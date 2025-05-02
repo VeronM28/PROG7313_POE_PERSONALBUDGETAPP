@@ -25,5 +25,15 @@ interface BudgetDao {
     @Delete
     suspend fun delete(budget: Budget)
 
+    @Query("""
+        SELECT c.id as categoryId, b.spentAmount 
+        FROM budgets b
+        JOIN categories c ON b.categoryId = c.id
+        WHERE b.userOwnerId = :userId 
+        AND b.month = :month 
+        AND b.year = :year
+    """)
+    suspend fun getCategorySpendingMap(userId: Int, month: String, year: String): Map<Int, Double>
+
 
 }

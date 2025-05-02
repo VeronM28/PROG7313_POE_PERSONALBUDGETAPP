@@ -11,15 +11,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:background="#F8F3FF"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/backButton"
-            android:layout_width="64dp"
-            android:layout_height="55dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_menu"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Edit Spending"
             android:textColor="#000000"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,9 +46,8 @@
         android:id="@+id/toggleCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/topBar">
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <RadioButton
                 android:id="@+id/radioIncome"
@@ -87,10 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Enter Your Amount"
+        android:layout_marginTop="16dp"
+        android:text="Amount"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleCard" />
@@ -98,17 +98,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/amountCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/amountLabel">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background">
 
             <TextView
@@ -118,7 +117,7 @@
                 android:layout_marginStart="16dp"
                 android:text="R"
                 android:textColor="#000000"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,8 +133,8 @@
                 android:hint="0.00"
                 android:inputType="numberDecimal"
                 android:textColor="#000000"
-                android:textColorHint="# 757575 "
-                android:textSize="18sp"
+                android:textColorHint="#757575"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/currencyLabel"
@@ -149,10 +148,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Category"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/amountCard" />
@@ -160,10 +159,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/categoryCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/categoryLabel">
@@ -171,7 +169,7 @@
         <Spinner
             android:id="@+id/categorySpinner"
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -184,10 +182,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Payment Method"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categoryCard" />
@@ -195,10 +193,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/paymentMethodCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/paymentMethodLabel">
@@ -206,7 +203,7 @@
         <Spinner
             android:id="@+id/paymentMethodSpinner"
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -219,10 +216,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Date"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/paymentMethodCard" />
@@ -230,17 +227,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/datePickerCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/dateLabel">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background">
 
             <TextView
@@ -250,7 +246,7 @@
                 android:layout_marginStart="16dp"
                 android:hint="mm/dd/yyyy"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/calendarIcon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -274,10 +270,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Receipt (optional)"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/datePickerCard" />
@@ -285,17 +281,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/receiptCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintTop_toBottomOf="@id/receiptLabel">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background">
 
             <TextView
@@ -305,7 +300,7 @@
                 android:layout_marginStart="16dp"
                 android:text="Attach File"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/attachIcon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -327,12 +322,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/deleteButtonCard"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editEntryButtonCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/receiptCard">
@@ -340,8 +337,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/deleteButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/delete_button_background"
+            android:layout_height="match_parent"
+            android:background="#FF0000"
             android:clickable="true"
             android:focusable="true">
 
@@ -350,7 +347,7 @@
                 android:layout_height="wrap_content"
                 android:text="Delete"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -362,10 +359,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/editEntryButtonCard"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="@id/deleteButtonCard"
@@ -376,7 +372,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editEntryButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
             android:background="@drawable/gradient_background"
             android:clickable="true"
             android:focusable="true">
@@ -384,9 +380,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Entry"
+                android:text="Save"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

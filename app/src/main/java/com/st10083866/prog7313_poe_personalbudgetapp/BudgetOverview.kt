@@ -1,59 +1,52 @@
-package com.st10083866.prog7313_poe_personalbudgetapp.activities
+package com.st10083866.prog7313_poe_personalbudgetapp.view
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.databinding.DataBindingUtil
+import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityBudgetOverviewBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.BudgetViewModel
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
-import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
-import java.util.*
 
 class BudgetOverviewActivity : AppCompatActivity() {
+
+    private val viewModel: BudgetViewModel by viewModels()
     private lateinit var binding: ActivityBudgetOverviewBinding
-    private val budgetViewModel: BudgetViewModel by viewModels()
-    private val categoryViewModel: CategoryViewModel by viewModels()
-    private val transactionViewModel: TransactionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBudgetOverviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_budget_overview)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        observeViewModel()
 
         val userId = 1 // Replace with actual user ID
-        observeViewModels(userId)
+        viewModel.loadBudgetOverviewData(userId)
     }
 
-    private fun observeViewModels(userId: Int) {
-        budgetViewModel.getBudget(userId).observe(this, Observer { budgets ->
-            budgets.firstOrNull()?.let {
-                binding.budgetPeriod.text = "${it.month} ${it.year}"
+    private fun observeViewModel() {
+        viewModel.categories.observe(this) { categories ->
+            if (categories.isNotEmpty()) {
+                binding.category = categories[0]
+                binding.executePendingBindings()
             }
-        })
-
-        categoryViewModel.getCategories(userId).observe(this, Observer { categories ->
-            // Directly populate categories layout
-            binding.categoriesContainer.removeAllViews()
-            categories.forEach { category ->
-                // Inflate and add category views manually
-                // (You would create this layout in your XML)
-                // val categoryView = layoutInflater.inflate(R.layout.item_category, binding.categoriesContainer, false)
-                // categoryView.categoryName.text = category.name
-                // binding.categoriesContainer.addView(categoryView)
-            }
-        })
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.DAY_OF_MONTH, 1)
         }
-        val fromDate = calendar.timeInMillis
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
-        val toDate = calendar.timeInMillis
 
-        transactionViewModel.getTotalExpensesBetweenDates(userId, fromDate, toDate)
-            .observe(this, Observer { total ->
-                binding.balanceAmount.text = "R %.2f".format(total)
-            })
+        viewModel.availableBalance.observe(this) { balance ->
+            binding.balanceAmount.text = getString(R.string.currency_format, balance)
+        }
+
+        viewModel.budgetPeriod.observe(this) { period ->
+            binding.budgetPeriod.text = period
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

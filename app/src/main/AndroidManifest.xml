@@ -14,35 +14,11 @@
         tools:targetApi="31">
 
         
-        <activity
-            android:name=".ui.budget.BudgetOverview"
-            android:exported="false" />
+
         <activity
             android:name=".Dashboard"
             android:exported="false" />
-        <activity
-            android:name=".ui.budget.EditBudget"
-            android:exported="false" />
-        <activity
-            android:name=".ui.budget.CreateBudget"
-            android:exported="false" />
-        <activity
-            android:name=".ui.transactions.MonthlySpending"
-            android:exported="false" />
-        <activity
-            android:name=".Expenses"
-            android:exported="false" />
-        <activity
-            android:name=".ui.transactions.EditSpending"
-            android:exported="false" />
-        <activity
-            android:name=".ui.transactions.AddExpense"
-            android:exported="false" />
 
-
-        <activity
-        android:name=".ActivityLogPage"
-        android:exported="false" />
       
             <activity android:name=".LaunchPageActivity" android:exported="true">
             <intent-filter>
@@ -50,21 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
 
-
-        <activity android:name=".ui.profile.EditProfile" />
-        <activity android:name=".ui.profile.ProfilePage" />
-        <activity
-            android:name=".ui.savings.CreateSavingsContribution"
-            android:exported="false" />
-        <activity
-            android:name=".ui.savings.SavingsGoalPage"
-            android:exported="false" />
-        <activity
-            android:name=".ui.savings.CreateSavingsGoal"
-            android:exported="false"
-            android:label="@string/title_activity_create_savings_goal" />
     </application>
 
 </manifest>

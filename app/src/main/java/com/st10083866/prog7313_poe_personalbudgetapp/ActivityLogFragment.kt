@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLogPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogAdapter
-import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.EditSpending
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.EditSpendingFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +46,7 @@ class ActivityLogFragment : Fragment() {
         //displays all transaction logs
         adapter = ActivityLogAdapter(
             onEditClick = { transaction ->
-                val intent = Intent(requireContext(), EditSpending::class.java)
+                val intent = Intent(requireContext(), EditSpendingFragment::class.java)
                 intent.putExtra("TRANSACTION_ID", transaction.id)
                 startActivity(intent)
             },

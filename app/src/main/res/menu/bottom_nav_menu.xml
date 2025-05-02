@@ -5,20 +5,20 @@
         android:id="@+id/nav_home"
         android:title="Home"
         android:icon="@drawable/ic_home"/>
-
+    <!-- this is the nav bar for the home page -->
     <item
         android:id="@+id/nav_profile"
         android:title="Profile"
         android:icon="@drawable/ic_profile" />
-
+    <!-- this is for the nav profile -->
     <item
         android:id="@+id/nav_budget"
         android:title="Budget"
         android:icon="@drawable/ic_budget"/>
-
+    <!-- this is the nav bar budget -->
     <item
         android:id="@+id/nav_addEntry"
         android:title="Add Entry"
         android:icon="@drawable/ic_addentry" />
-
+    <!-- this is for the nav bar entry -->
 </menu>

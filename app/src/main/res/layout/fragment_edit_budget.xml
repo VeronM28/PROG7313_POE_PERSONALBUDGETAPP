@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <!-- Edit Budget page -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

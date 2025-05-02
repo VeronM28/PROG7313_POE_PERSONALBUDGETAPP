@@ -24,7 +24,7 @@
             android:textSize="24sp"
             android:textStyle="bold" />
     </com.google.android.material.appbar.AppBarLayout>
-
+    <!-- this is the Dashboard page -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

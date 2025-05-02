@@ -31,6 +31,10 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         userId = arguments?.getInt("USER_ID", -1) ?: -1
+        if (userId == -1){
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         binding.btnAddCategory.setOnClickListener {
             val name = binding.etCategoryName.text.toString()
@@ -56,9 +60,6 @@ class CategoryFragment : Fragment() {
 
             Toast.makeText(requireContext(), "Category added successfully!", Toast.LENGTH_SHORT)
                 .show()
-
-            // Optional: Use NavController to go back
-            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

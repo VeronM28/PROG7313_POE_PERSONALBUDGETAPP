@@ -14,12 +14,10 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     private val db = AppDatabase.getDatabase(application)
     private val categoryDao = db.categoryDao()
     private val repository: CategoryRepository
-    val allCategories: LiveData<List<Category>>
 
     init {
         val categoryDao = AppDatabase.getDatabase(application).categoryDao()
         repository = CategoryRepository(categoryDao)
-        allCategories = repository.allCategories
     }
 
     fun addCategory(category: Category) {
@@ -39,6 +37,13 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     }
     fun deleteCategory(category: Category) = viewModelScope.launch {
         repository.deleteCategory(category)
+    }
+    fun allCategories(userId: Int): LiveData<List<Category>>{
+        return repository.allCategories(userId)
+    }
+
+    fun getCategoryForTransaction(categoryId: Int?): String{
+        return categoryDao.getCategoryForTransaction(categoryId)
     }
 
 

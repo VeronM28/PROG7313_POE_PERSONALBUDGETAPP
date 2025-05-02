@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.net.Uri
 import android.provider.MediaStore
+import android.widget.AdapterView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
@@ -60,24 +61,32 @@ class AddExpensesFragment : Fragment() {
     }
 
     private fun createCategoryDropdown() {
-        categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner, Observer { categories ->
+        categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
             if (categories.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "No categories found", Toast.LENGTH_SHORT).show()
-                return@Observer
+                return@observe
             }
 
             val categoryNames = categories.map { it.name }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categoryNames)
-            binding.spinnerCategory.setAdapter(adapter)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            // Defaults to first category
-            binding.spinnerCategory.setText(categoryNames[0], false)
+            val spinner = binding.spinnerCategory
+            spinner.adapter = adapter
+
+            // Optional: Set default category selection to the first item
             selectedCategoryId = categories[0].id
 
-            binding.spinnerCategory.setOnItemClickListener { _, _, position, _ ->
-                selectedCategoryId = categories[position].id
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    selectedCategoryId = categories[position].id
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    selectedCategoryId = null
+                }
             }
-        })
+        }
     }
 
     private fun createImageUpload() {

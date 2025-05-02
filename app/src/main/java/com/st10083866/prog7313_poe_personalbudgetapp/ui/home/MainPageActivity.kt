@@ -40,7 +40,7 @@ class MainPageActivity : AppCompatActivity() {
 
         //loads userID from saved session
         val session = SessionManager(this)
-        userId = intent.getIntExtra("USER_ID", session.getUserId().toInt())
+        userId = intent.getIntExtra("USER_ID", session.getUserId())
 
         //default fragment
         loadFragment(HomeFragment().withUser(userId))

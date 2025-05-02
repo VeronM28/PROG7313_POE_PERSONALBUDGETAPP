@@ -6,7 +6,9 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
 
 class CategoryRepository(private val categoryDao: CategoryDao) {
 
-    val allCategories: LiveData<List<Category>> = categoryDao.getAllCategories()
+    fun allCategories(userId: Int): LiveData<List<Category>>{
+        return categoryDao.getCategoriesForUser(userId)
+    }
 
     suspend fun insertCategory(category: Category) {
         categoryDao.insertCategory(category)

@@ -30,12 +30,12 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <AutoCompleteTextView
+    <Spinner
         android:id="@+id/spinnerCategory"
         android:layout_width="383dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
-        android:hint="Category"
+        android:spinnerMode="dropdown"
         android:background="@drawable/gradient_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

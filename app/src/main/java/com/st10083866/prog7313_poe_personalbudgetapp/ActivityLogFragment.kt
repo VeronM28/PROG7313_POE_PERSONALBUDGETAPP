@@ -18,6 +18,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLogPage
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogAdapter
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.EditSpendingFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +28,7 @@ class ActivityLogFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: TransactionViewModel by viewModels()
+    private val categoryViewModel: CategoryViewModel by viewModels()
     private lateinit var adapter: ActivityLogAdapter
 
     private var fromDate: String = ""
@@ -45,10 +47,19 @@ class ActivityLogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //displays all transaction logs
         adapter = ActivityLogAdapter(
+            categoryViewModel,
             onEditClick = { transaction ->
-                val intent = Intent(requireContext(), EditSpendingFragment::class.java)
-                intent.putExtra("TRANSACTION_ID", transaction.id)
-                startActivity(intent)
+                val fragment = EditSpendingFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt("TRANSACTION_ID", transaction.id)
+                        putInt("USER_ID", userId)
+                    }
+                }
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
             },
             onDownloadClick = { transaction ->
                 if (!transaction.uploadedPicturePath.isNullOrEmpty()) {

@@ -6,19 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
-import org.w3c.dom.Text
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.getValue
 
-class ActivityLogAdapter(private val onEditClick: (Transaction) -> Unit, private val onDownloadClick: (Transaction) -> Unit) : RecyclerView.Adapter<ActivityLogAdapter.ViewHolder>(){
+class ActivityLogAdapter(private val categoryViewModel: CategoryViewModel, val onEditClick: (Transaction) -> Unit, private val onDownloadClick: (Transaction) -> Unit) : RecyclerView.Adapter<ActivityLogAdapter.ViewHolder>(){
 
     private var items = listOf<Transaction>()
 
     //a holder for each item
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val title: TextView = view.findViewById(R.id.transactionTitle)
         val icon: ImageView = view.findViewById(R.id.transactionIcon)
         val date: TextView = view.findViewById(R.id.transactionDate)
         val method: TextView = view.findViewById(R.id.transactionType)
@@ -40,6 +43,7 @@ class ActivityLogAdapter(private val onEditClick: (Transaction) -> Unit, private
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tx = items[position]
 
+        holder.title.text = categoryViewModel.getCategoryForTransaction(tx.categoryId)
         holder.date.text = formatDate(tx.date)
         holder.amount.text = "R${String.format("%,.2f", tx.amount)}"
         holder.method.text = tx.paymentMethod

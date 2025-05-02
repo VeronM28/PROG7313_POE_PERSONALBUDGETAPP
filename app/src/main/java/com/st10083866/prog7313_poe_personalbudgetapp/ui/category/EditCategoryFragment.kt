@@ -22,6 +22,7 @@ class EditCategoryFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var categoryList = listOf<Category>()
     private var selectedCategory: Category? = null
+    private var userId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +35,9 @@ class EditCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        userId = arguments?.getInt("USER_ID", -1) ?: -1
         // Observing the categories list
-        categoryViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
+        categoryViewModel.allCategories(userId).observe(viewLifecycleOwner) { categories ->
             categoryList = categories
             val names = categories.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, names)
@@ -73,7 +74,6 @@ class EditCategoryFragment : Fragment() {
                 )
                 categoryViewModel.updateCategory(updatedCategory)
                 Toast.makeText(requireContext(), "Category updated", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressed()
             }
         }
 
@@ -82,7 +82,6 @@ class EditCategoryFragment : Fragment() {
             selectedCategory?.let {
                 categoryViewModel.deleteCategory(it)
                 Toast.makeText(requireContext(), "Category deleted", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressed()
             }
         }
     }

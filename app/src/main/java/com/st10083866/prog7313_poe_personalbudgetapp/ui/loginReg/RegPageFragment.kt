@@ -71,13 +71,13 @@ class RegPageFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            db.userDao().insertUser(user)
+            val insertedId: Long = db.userDao().insertUser(user)
 
             val session = SessionManager(requireContext())
-            session.saveUserId(user.userId) // Save the actual userId
+            session.saveUserId(insertedId)
 
             val intent = Intent(requireContext(), MainPageActivity::class.java)
-            intent.putExtra("USER_ID", user.userId)
+            intent.putExtra("USER_ID", insertedId)
             startActivity(intent)
             requireActivity().finish()
 

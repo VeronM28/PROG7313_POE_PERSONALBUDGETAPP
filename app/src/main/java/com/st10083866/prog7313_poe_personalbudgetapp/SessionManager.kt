@@ -8,8 +8,10 @@ class SessionManager(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
 
-    fun saveUserId(userId: Int) {
-        prefs.edit().putInt("USER_ID", userId).apply()
+    fun saveUserId(userId: Long) {
+        val editor = prefs.edit()
+            editor.putLong("USER_ID", userId)
+            editor.apply()
     }
 
     fun getUserId(): Int {

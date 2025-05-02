@@ -6,7 +6,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.User
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: User): Long
 
     @Query("SELECT * FROM users WHERE userId = :id")
     suspend fun getUserbyId(id: Int): User?

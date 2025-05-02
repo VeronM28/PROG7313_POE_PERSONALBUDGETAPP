@@ -14,6 +14,7 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
     private val repository: BudgetRepository
 
     val allCategories: LiveData<List<Category>>
+    val allBudgets: LiveData<List<Budget>> = repository.getAllBudgets()
 
 
     init {
@@ -24,6 +25,14 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
 
     fun insertBudget(budget: Budget) = viewModelScope.launch {
         repository.insertBudget(budget)
+    }
+
+    fun updateBudget(budget: Budget) = viewModelScope.launch {
+        repository.updateBudget(budget)
+    }
+
+    fun deleteBudget(budget: Budget) = viewModelScope.launch {
+        repository.deleteBudget(budget)
     }
 
 }

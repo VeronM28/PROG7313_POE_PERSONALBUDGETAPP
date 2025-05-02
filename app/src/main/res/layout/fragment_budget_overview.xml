@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.savings.SavingsGoalPage">
-
+    <!-- this is the savings goal page -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/gradient_background"
             android:textAlignment="center"/>
-
+        <!-- this is the text view in the balance -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -58,7 +58,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-
+        <!-- this is the layout part  -->
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

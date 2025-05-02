@@ -38,6 +38,7 @@
             android:hint="First Name"
             android:textColor="@color/black"
             android:inputType="textPersonName"/>
+        <!-- this is the First Name box credentials -->
         <EditText
             android:id="@+id/etLastName"
             android:layout_width="250dp"
@@ -48,6 +49,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:inputType="textPersonName"/>
+        <!-- this is the Last Name box credentials -->
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="250dp"
@@ -58,6 +60,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:inputType="text"/>
+        <!-- this is the Email box credentials  -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="250dp"
@@ -68,6 +71,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:inputType="textEmailAddress"/>
+        <!-- this is the Password box credentials-->
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="250dp"
@@ -78,6 +82,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:inputType="textPassword"/>
+        <!-- this is the Confirm Password box credentials -->
         <EditText
             android:id="@+id/etConfirmPassword"
             android:layout_width="250dp"
@@ -88,7 +93,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:inputType="textPassword"/>
-
+        <!-- this is the Register button credentials -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReg"
             android:layout_width="120dp"

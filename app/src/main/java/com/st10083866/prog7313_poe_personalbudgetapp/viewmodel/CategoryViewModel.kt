@@ -5,6 +5,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
 import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
 import com.st10083866.prog7313_poe_personalbudgetapp.repository.CategoryRepository
 import kotlinx.coroutines.launch
@@ -35,6 +36,12 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     fun deleteCategory(category: Category) = viewModelScope.launch {
         repository.deleteCategory(category)
     }
+
+    fun getCategoriesForUser(userId: Int): LiveData<List<Category>> {
+            return categoryDao.getCategoriesForUser(userId)
+        }
+
+
 
 
 }

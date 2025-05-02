@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLogPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogAdapter
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.EditSpending
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -36,7 +37,6 @@ class ActivityLogPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_log_page)
-
         //displays all transaction logs
         adapter = ActivityLogAdapter(
             onEditClick = { transactions ->

@@ -11,7 +11,7 @@ interface CategoryDao {
     suspend fun insertCategory(category: Category)
 
     @Query("SELECT * FROM categories WHERE userOwnerId = :userId")
-    suspend fun getCategoriesForUser(userId: Int): List<Category>
+    fun getCategoriesForUser(userId: Int): LiveData<List<Category>>
 
     @Query("SELECT * FROM categories")
     fun getAllCategories(): LiveData<List<Category>>

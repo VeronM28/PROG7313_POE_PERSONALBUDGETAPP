@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
+import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentLoginPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
@@ -55,8 +56,11 @@ class LoginPageFragment : Fragment() {
                     if (user != null) {
                         Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
 
-                        val intent = Intent(requireActivity(), MainPageActivity::class.java)
-                        intent.putExtra("userId", user.userId)
+                        val session = SessionManager(requireContext())
+                        session.saveUserId(user.userId) // Save the actual userId
+
+                        val intent = Intent(requireContext(), MainPageActivity::class.java)
+                        intent.putExtra("USER_ID", user.userId)
                         startActivity(intent)
                         requireActivity().finish()
                     } else {

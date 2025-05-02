@@ -68,5 +68,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
     //kotlin co-routines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.cardview:cardview:1.0.0")
 
 }

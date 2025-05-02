@@ -56,7 +56,7 @@
                     android:id="@+id/spinnerEditBudget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:prompt="Select Budget"
+                    android:prompt="@string/select_budget"
                     android:background="@drawable/gradient_background"/>
 
                 <!-- Editable Fields -->
@@ -82,7 +82,7 @@
                     android:id="@+id/spinnerEditBudgetCat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:prompt="Select Category"
+                    android:prompt="@string/select_category"
                     android:background="@drawable/gradient_background"
                     android:layout_marginTop="25dp"/>
 

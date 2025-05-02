@@ -18,26 +18,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:prefixText="R">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtAmount"
             android:layout_width="match_parent"
             android:background="@drawable/gradient_background"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:prefixText="R" />
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Category -->
     <AutoCompleteTextView
         android:id="@+id/categoryDropdown"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="375dp"
+        android:layout_height="62dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/gradient_background"
         android:hint="Category"
-        app:layout_constraintTop_toBottomOf="@id/amountLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/amountLayout" />
 
     <!-- Receipt Upload -->
     <androidx.cardview.widget.CardView

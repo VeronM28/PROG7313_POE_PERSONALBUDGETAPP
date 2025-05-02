@@ -14,13 +14,13 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
     private val repository: BudgetRepository
 
     val allCategories: LiveData<List<Category>>
-    val allBudgets: LiveData<List<Budget>> = repository.getAllBudgets()
-
+    val allBudgets: LiveData<List<Budget>>
 
     init {
         val db = AppDatabase.getDatabase(application)
         repository = BudgetRepository(db.budgetDao(), db.categoryDao())
         allCategories = repository.getAllCategories()
+        allBudgets = repository.getAllBudgets()
     }
 
     fun insertBudget(budget: Budget) = viewModelScope.launch {

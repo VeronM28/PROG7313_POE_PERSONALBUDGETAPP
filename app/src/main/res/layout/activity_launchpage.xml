@@ -1,77 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".LaunchPageActivity"
-    android:orientation="vertical"
-    android:background="@android:color/transparent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/mzansi_money"
-        android:background="@android:color/transparent"
-        />
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="center">
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_launch_login"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
-            android:background="@drawable/gradient_background"
-            android:backgroundTint="@null"
-            android:text="Login"
-            android:textColor="@color/black"
-            android:visibility="visible"
-            app:backgroundTint="@null"
-            app:cornerRadius="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            android:padding="10dp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_launch_reg"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
-            android:background="@drawable/gradient_background"
-            android:backgroundTint="@null"
-            android:text="Register"
-            android:textColor="@color/black"
-            android:visibility="visible"
-            app:backgroundTint="@null"
-            app:cornerRadius="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"/>
-    <TextView
-        android:id="@+id/txtViewHelp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Need Help?"
-        android:layout_marginTop="10dp"/>
-
-</LinearLayout>
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
+    <!-- Launch Screen Content (initially visible) -->
+    <LinearLayout
+        android:id="@+id/launchContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone"
-        android:background="@android:color/transparent" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="@android:color/white">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/mzansi_money"
+            android:contentDescription="Mzansi Money Logo"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+
+        <!-- Login Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_launch_login"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@null"
+            android:background="@drawable/gradient_background"
+            android:textColor="@android:color/black" />
+
+        <!-- Register Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_launch_reg"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:layout_gravity="center"
+            android:backgroundTint="@null"
+            android:background="@drawable/gradient_background"
+            android:textColor="@android:color/black" />
+
+        <!-- Optional Help Text -->
+        <TextView
+            android:id="@+id/txtViewHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Need Help?"
+            android:textColor="#757575"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
+
+</FrameLayout>
+
 
 
 

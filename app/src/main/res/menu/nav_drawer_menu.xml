@@ -39,7 +39,8 @@
 
         <item
             android:id="@+id/navLogPage"
-            android:title="Spending Logs" />
+            android:title="Spending Logs"
+            android:icon="@drawable/ic_actlog"/>
 
         <item
             android:id="@+id/navEditCategory"

@@ -4,20 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 
-@Entity(
-    tableName = "categories",
-    foreignKeys = [ForeignKey(
-        entity = User::class,
-        parentColumns = ["userId"],
-        childColumns = ["userOwnerId"],
-        onDelete = ForeignKey.CASCADE
-    )]
-)
 data class Category(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val userOwnerId: Int,
-    val name: String,
-    val description: String,
-    val limit: Double,
-    val spendType: String
+    var id: String = "",              // Firestore document ID (can be set or used from snapshot)
+    var userOwnerId: String = "",     // Reference to the owning user
+    var name: String = "",
+    var description: String = "",
+    var limit: Double = 0.0,
+    var spendType: String = ""
 )

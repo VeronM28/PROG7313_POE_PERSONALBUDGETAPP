@@ -4,20 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 
-@Entity(
-    tableName = "savings_goals",
-    foreignKeys = [ForeignKey(
-        entity = User::class,
-        parentColumns = ["userId"],
-        childColumns = ["userOwnerId"],
-        onDelete = ForeignKey.CASCADE
-    )]
-)
 data class SavingsGoal(
-    @PrimaryKey(autoGenerate = true) val id: Int= 0,
-    val userOwnerId: Int,
-    val goalName: String,
-    val targetAmount: Double,
-    val deadline: String,
-    val createdAt: String,
+    var id: String = "",
+    var userOwnerId: String = "",
+    var goalName: String = "",
+    var targetAmount: Double = 0.0,
+    var deadline: String = "",
+    var createdAt: String = ""
 )

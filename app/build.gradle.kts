@@ -4,6 +4,7 @@ plugins {
 
 
     id("com.google.devtools.ksp") version "1.9.24-1.0.20"
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -53,14 +54,11 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    //room components
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
     //lifestyle components
     val lifecycleVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")

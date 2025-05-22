@@ -4,25 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 
-@Entity(
-    tableName = "budgets",
-    foreignKeys = [ForeignKey(
-        entity = User::class,
-        parentColumns = ["userId"],
-        childColumns = ["userOwnerId"],
-        onDelete = ForeignKey.CASCADE
-    ),
-        ForeignKey(
-            entity = Category::class,
-            parentColumns = ["id"],
-            childColumns = ["categoryId"],
-            onDelete = ForeignKey.SET_NULL
-        )]
-)
 data class Budget(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val userOwnerId: Int,
-    val totalAmount: Double,
-    val spendingLimit: Double,
-    val categoryId: Int
+    var id: String = "",
+    var userOwnerId: String = "",
+    var totalAmount: Double = 0.0,
+    var spendingLimit: Double = 0.0,
+    var categoryId: String? = null
 )

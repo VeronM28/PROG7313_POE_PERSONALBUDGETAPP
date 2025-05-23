@@ -9,5 +9,5 @@ data class User(
     val username: String = "",
     val email: String = "",
     val passwordHash: String = "",
-    val profilePicturePath: String? = null
+    val profilePicturePath: String? = ""
 )

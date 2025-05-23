@@ -1,5 +1,7 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
@@ -11,69 +13,86 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class TransactionRepository {
-
     private val db = FirebaseFirestore.getInstance()
-    private val transactionsCollection = db.collection("transactions")
+    private val transactionsRef = db.collection("transactions")
 
-    suspend fun insert(transaction: Transaction) {
-        val docRef = if (transaction.id.isBlank()) {
-            transactionsCollection.document()
-        } else {
-            transactionsCollection.document(transaction.id)
-        }
-        transaction.id = docRef.id
-        docRef.set(transaction).await()
+    // Insert a transaction
+    fun insert(transaction: Transaction, onComplete: (Boolean) -> Unit) {
+        // Use Firestore document ID = transaction.id or auto-generated if null
+        val docId = transaction.id.toString() ?: transactionsRef.document().id
+        transactionsRef.document(docId).set(transaction)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
     }
 
-    fun getAllTransactions(userId: String): Flow<List<Transaction>> = callbackFlow {
-        val listener = transactionsCollection
-            .whereEqualTo("userOwnerId", userId)
-            .orderBy("date", Query.Direction.DESCENDING)
+    // Update a transaction (same as insert with existing doc ID)
+    fun updateTransaction(transaction: Transaction, onComplete: (Boolean) -> Unit) {
+        transaction.id?.let { id ->
+            transactionsRef.document(id.toString()).set(transaction)
+                .addOnSuccessListener { onComplete(true) }
+                .addOnFailureListener { onComplete(false) }
+        } ?: onComplete(false)
+    }
+
+    // Delete transaction by ID
+    fun deleteTransactionById(id: Int, onComplete: (Boolean) -> Unit) {
+        transactionsRef.document(id.toString()).delete()
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
+    }
+
+    // Get transaction by ID
+    fun getTransactionById(id: Int): LiveData<Transaction?> {
+        val liveData = MutableLiveData<Transaction?>()
+        transactionsRef.document(id.toString())
             .addSnapshotListener { snapshot, error ->
-                if (error != null || snapshot == null) {
-                    close(error)
+                if (error != null) {
+                    liveData.value = null
                     return@addSnapshotListener
                 }
-                trySend(snapshot.toObjects())
+                if (snapshot != null && snapshot.exists()) {
+                    val transaction = snapshot.toObject(Transaction::class.java)
+                    liveData.value = transaction
+                } else {
+                    liveData.value = null
+                }
             }
-        awaitClose { listener.remove() }
+        return liveData
     }
 
-    fun getTransactionsForUserBetweenDates(userId: String, fromDate: Long, toDate: Long): Flow<List<Transaction>> = callbackFlow {
-        val listener = transactionsCollection
+    // Get all transactions for user ordered by date descending
+    fun getAllTransactions(userId: String): LiveData<List<Transaction>> {
+        val liveData = MutableLiveData<List<Transaction>>()
+        transactionsRef
+            .whereEqualTo("userOwnerId", userId)
+            .orderBy("date", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null || snapshots == null) {
+                    liveData.value = emptyList()
+                    return@addSnapshotListener
+                }
+                val transactions = snapshots.documents.mapNotNull { it.toObject(Transaction::class.java) }
+                liveData.value = transactions
+            }
+        return liveData
+    }
+
+    // Get transactions for user between two dates ordered by date descending
+    fun getTransactionsForUserBetweenDates(userId: Int, fromDate: Long, toDate: Long): LiveData<List<Transaction>> {
+        val liveData = MutableLiveData<List<Transaction>>()
+        transactionsRef
             .whereEqualTo("userOwnerId", userId)
             .whereGreaterThanOrEqualTo("date", fromDate)
             .whereLessThanOrEqualTo("date", toDate)
             .orderBy("date", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null || snapshot == null) {
-                    close(error)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null || snapshots == null) {
+                    liveData.value = emptyList()
                     return@addSnapshotListener
                 }
-                trySend(snapshot.toObjects())
+                val transactions = snapshots.documents.mapNotNull { it.toObject(Transaction::class.java) }
+                liveData.value = transactions
             }
-        awaitClose { listener.remove() }
-    }
-
-    suspend fun updateTransaction(transaction: Transaction) {
-        if (transaction.id.isNotBlank()) {
-            transactionsCollection.document(transaction.id).set(transaction).await()
-        }
-    }
-
-    suspend fun deleteTransactionById(id: String) {
-        transactionsCollection.document(id).delete().await()
-    }
-
-    fun getTransactionById(id: String): Flow<Transaction?> = callbackFlow {
-        val listener = transactionsCollection.document(id)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null || snapshot == null || !snapshot.exists()) {
-                    trySend(null)
-                    return@addSnapshotListener
-                }
-                trySend(snapshot.toObject<Transaction>())
-            }
-        awaitClose { listener.remove() }
+        return liveData
     }
 }

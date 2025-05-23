@@ -11,47 +11,60 @@ class UserRepository {
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
 
-    suspend fun insertUser(user: User): String {
-        val documentRef = if (user.userId.isBlank()) {
-            usersCollection.document() // Generate new ID
-        } else {
-            usersCollection.document(user.userId) // Use existing ID
+    fun insertUser(user: User, onResult: (Boolean) -> Unit) {
+        if (user.userId.isBlank()) {
+            user.userId = usersCollection.document().id // Generate new ID if needed
         }
-        user.userId = documentRef.id
-        documentRef.set(user).await()
-        return documentRef.id
+        usersCollection.document(user.userId).set(user)
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
     }
 
-    suspend fun getUserById(userId: String): User? {
-        val snapshot = usersCollection.document(userId).get().await()
-        return if (snapshot.exists()) snapshot.toObject<User>() else null
+    fun getUserById(userId: String, onResult: (User?) -> Unit) {
+        usersCollection.document(userId).get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    onResult(doc.toObject(User::class.java))
+                } else {
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener { onResult(null) }
     }
 
-    suspend fun getUserByUsernameAndPassword(username: String, passwordHash: String): User? {
-        val snapshot = usersCollection
+    fun getUserByUsernameAndPassword(username: String, passwordHash: String, onResult: (User?) -> Unit) {
+        usersCollection
             .whereEqualTo("username", username)
             .whereEqualTo("passwordHash", passwordHash)
             .get()
-            .await()
-        return snapshot.toObjects<User>().firstOrNull()
+            .addOnSuccessListener { querySnapshot ->
+                val user = querySnapshot.documents.firstOrNull()?.toObject(User::class.java)
+                onResult(user)
+            }
+            .addOnFailureListener { onResult(null) }
     }
 
-    suspend fun login(email: String, password: String): User? {
-        val snapshot = usersCollection
+    fun login(email: String, passwordHash: String, onResult: (User?) -> Unit) {
+        usersCollection
             .whereEqualTo("email", email)
-            .whereEqualTo("passwordHash", password)
+            .whereEqualTo("passwordHash", passwordHash)
             .get()
-            .await()
-        return snapshot.toObjects<User>().firstOrNull()
+            .addOnSuccessListener { querySnapshot ->
+                val user = querySnapshot.documents.firstOrNull()?.toObject(User::class.java)
+                onResult(user)
+            }
+            .addOnFailureListener { onResult(null) }
     }
 
-    suspend fun updateUserProfile(userId: String, username: String, email: String, password: String, picturePath: String) {
-        val updates = mapOf(
-            "username" to username,
-            "email" to email,
-            "passwordHash" to password,
-            "profilePicturePath" to picturePath
-        )
-        usersCollection.document(userId).update(updates).await()
+    fun updateUserProfile(user: User, onResult: (Boolean) -> Unit) {
+        usersCollection.document(user.userId).update(
+            mapOf(
+                "username" to user.username,
+                "email" to user.email,
+                "passwordHash" to user.passwordHash,
+                "profilePicturePath" to user.profilePicturePath
+            )
+        ).addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
     }
 }

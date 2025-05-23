@@ -4,49 +4,54 @@ import android.app.Application
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
-import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
+
 import com.st10083866.prog7313_poe_personalbudgetapp.repository.CategoryRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(application: Application) : AndroidViewModel(application) {
-    private val db = AppDatabase.getDatabase(application)
-    private val categoryDao = db.categoryDao()
-    private val repository: CategoryRepository
+class CategoryViewModel : ViewModel() {
 
-    init {
-        val categoryDao = AppDatabase.getDatabase(application).categoryDao()
-        repository = CategoryRepository(categoryDao)
+    private val repository = CategoryRepository()
+
+    private val _operationSuccess = MutableLiveData<Boolean>()
+    val operationSuccess: LiveData<Boolean> get() = _operationSuccess
+
+    private val _categoryName = MutableLiveData<String?>()
+    val categoryName: LiveData<String?> get() = _categoryName
+
+    //  Get categories for a specific user
+    fun getCategoriesForUser(userId: String): LiveData<List<Category>> {
+        return repository.getCategoriesForUser(userId)
     }
 
-    fun addCategory(category: Category) {
-        viewModelScope.launch {
-            categoryDao.insertCategory(category)
+    //  Get all categories
+    fun getAllCategories(userId: String): LiveData<List<Category>> {
+        return repository.getAllCategories(userId)
+    }
+
+    //  Insert or update a category
+    fun saveCategory(category: Category) {
+        repository.upsertCategory(category) { success ->
+            _operationSuccess.postValue(success)
         }
     }
-    fun getCategoriesForUser(userId: Int): LiveData<List<Category>> {
-         return  categoryDao.getCategoriesForUser(userId)
+
+    //  Delete category by ID
+    fun deleteCategoryById(categoryId: String) {
+        repository.deleteCategory(categoryId) { success ->
+            _operationSuccess.postValue(success)
+        }
     }
 
-    fun insertCategory(category: Category) = viewModelScope.launch {
-        repository.insertCategory(category)
+    // 🔎 Get category name for a given ID
+    fun loadCategoryName(categoryId: String) {
+        repository.getCategoryNameById(categoryId) { name ->
+            _categoryName.postValue(name)
+        }
     }
-    fun updateCategory(category: Category) = viewModelScope.launch {
-        repository.updateCategory(category)
-    }
-    fun deleteCategory(category: Category) = viewModelScope.launch {
-        repository.deleteCategory(category)
-    }
-    fun allCategories(userId: Int): LiveData<List<Category>>{
-        return repository.allCategories(userId)
-    }
-
-    fun getCategoryForTransaction(categoryId: Int?): String{
-        return categoryDao.getCategoryForTransaction(categoryId)
-    }
-
-
-
-
 }

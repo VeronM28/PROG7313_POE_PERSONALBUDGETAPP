@@ -19,53 +19,57 @@ class BudgetOverviewFragment : Fragment() {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
     private val budgetViewModel: BudgetViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBudgetOverviewBinding.inflate(inflater, container, false)
-        userId = arguments?.getInt("USER_ID") ?: -1
+        userId = arguments?.getString("USER_ID") ?: ""
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (userId != -1) {
+        if (userId.isNotEmpty()) {
             displayBudgetSummary(userId)
         }
     }
 
-    private fun displayBudgetSummary(userId: Int) {
+    private fun displayBudgetSummary(userId: String) {
         categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
             transactionViewModel.getAllTransactions(userId).observe(viewLifecycleOwner) { transactions ->
+
+                // Calculate total balance (income - expenses)
                 val totalBalance = transactions.sumOf {
                     if (it.type == "income") it.amount else -it.amount
                 }
                 binding.txtTotal.text = "R %.2f".format(totalBalance)
 
+                // Clear any existing views
                 binding.contributionsRecyclerView.removeAllViews()
 
-                val categorySums = mutableMapOf<Int, Double>()
+                // Map to track total expenses per category
+                val categorySums = mutableMapOf<String, Double>()
 
-                // Calculates spending per category
                 transactions.filter { it.type == "expense" && it.categoryId != null }
-                    .forEach {
-                        categorySums[it.categoryId!!] = categorySums.getOrDefault(it.categoryId!!, 0.0) + it.amount
+                    .forEach { txn ->
+                        val catId = txn.categoryId!!
+                        categorySums[catId] = categorySums.getOrDefault(catId, 0.0) + txn.amount
                     }
 
                 val totalExpenses = categorySums.values.sum()
 
-                // Displays category
                 categories.forEach { category ->
                     val amount = categorySums[category.id] ?: 0.0
                     val percent = if (totalExpenses > 0) (amount / totalExpenses) * 100 else 0.0
 
-                    val view = layoutInflater.inflate(R.layout.item_category_summary, binding.contributionsRecyclerView, false)
-                    view.findViewById<TextView>(R.id.txtCategoryName).text = category.name
-                    view.findViewById<TextView>(R.id.txtAmount).text = "R %.2f".format(amount)
-                    view.findViewById<TextView>(R.id.txtPercent).text = "%.0f%%".format(percent)
-                    binding.contributionsRecyclerView.addView(view)
+                    val itemView = layoutInflater.inflate(R.layout.item_category_summary, binding.contributionsRecyclerView, false)
+                    itemView.findViewById<TextView>(R.id.txtCategoryName).text = category.name
+                    itemView.findViewById<TextView>(R.id.txtAmount).text = "R %.2f".format(amount)
+                    itemView.findViewById<TextView>(R.id.txtPercent).text = "%.0f%%".format(percent)
+
+                    binding.contributionsRecyclerView.addView(itemView)
                 }
             }
         }

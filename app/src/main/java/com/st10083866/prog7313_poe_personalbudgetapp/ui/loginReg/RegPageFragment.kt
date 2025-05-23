@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.User
-import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
+
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentRegPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
 class RegPageFragment : Fragment() {
@@ -22,7 +24,7 @@ class RegPageFragment : Fragment() {
     private var _binding: FragmentRegPageBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var db: AppDatabase
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +36,6 @@ class RegPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        db = AppDatabase.getDatabase(requireContext())
 
         binding.btnReg.setOnClickListener {
             registerUser()
@@ -70,17 +70,23 @@ class RegPageFragment : Fragment() {
             passwordHash = password
         )
 
-        lifecycleScope.launch {
-            val insertedId: Int = db.userDao().insertUser(user).toInt()
+        // Call repository via ViewModel to insert user into Firestore
+        loginViewModel.registerUser(user) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT).show()
 
-            val session = SessionManager(requireContext())
-            session.saveUserId(insertedId)
 
-            val intent = Intent(requireContext(), MainPageActivity::class.java)
-            intent.putExtra("USER_ID", insertedId)
-            startActivity(intent)
-            requireActivity().finish()
 
+                val session = SessionManager(requireContext())
+                session.saveUserId(user.userId)
+
+                val intent = Intent(requireContext(), MainPageActivity::class.java)
+                intent.putExtra("USER_ID", user.userId)
+                startActivity(intent)
+                requireActivity().finish()
+            } else {
+                Toast.makeText(requireContext(), "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -88,5 +94,4 @@ class RegPageFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

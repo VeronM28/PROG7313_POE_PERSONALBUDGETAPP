@@ -1,59 +1,69 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.repository
 
+
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.toObjects
-import com.st10083866.prog7313_poe_personalbudgetapp.data.dao.BudgetDao
-import com.st10083866.prog7313_poe_personalbudgetapp.data.dao.CategoryDao
+
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
-import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
+
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class BudgetRepository {
 
     private val db = FirebaseFirestore.getInstance()
-    private val budgetsCollection = db.collection("budgets")
+    private val budgetsRef = db.collection("budgets")
 
-    suspend fun insertOrUpdateBudget(budget: Budget) {
-        val docRef = if (budget.id.isBlank()) {
-            budgetsCollection.document() // New document
-        } else {
-            budgetsCollection.document(budget.id) // Existing budget
-        }
-        budget.id = docRef.id
-        docRef.set(budget).await()
+    private var budgetsListener: ListenerRegistration? = null
+    private val budgetsLiveData = MutableLiveData<List<Budget>>()
+
+    // Insert or update budget (Firestore `set` replaces or creates)
+    fun insertOrUpdateBudget(budget: Budget, onComplete: (Boolean) -> Unit) {
+        val id = budget.id.takeIf { it.isNotEmpty() } ?: budgetsRef.document().id
+        budget.id = id // Ensure budget has an ID
+
+        budgetsRef.document(id)
+            .set(budget)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
     }
 
-    suspend fun deleteBudget(budget: Budget) {
-        if (budget.id.isNotBlank()) {
-            budgetsCollection.document(budget.id).delete().await()
+    // Delete budget
+    fun deleteBudget(budget: Budget, onComplete: (Boolean) -> Unit) {
+        if (budget.id.isEmpty()) {
+            onComplete(false)
+            return
         }
+        budgetsRef.document(budget.id)
+            .delete()
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
     }
 
-    fun getAllBudgets(): Flow<List<Budget>> = callbackFlow {
-        val listener = budgetsCollection.addSnapshotListener { snapshot, error ->
-            if (error != null || snapshot == null) {
-                close(error)
+    // Get all budgets as LiveData, with real-time updates
+    fun getAllBudgets(): LiveData<List<Budget>> {
+        budgetsListener?.remove() // Remove any previous listener
+        budgetsListener = budgetsRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                budgetsLiveData.value = emptyList()
                 return@addSnapshotListener
             }
-            trySend(snapshot.toObjects())
+            if (snapshot != null) {
+                val budgets = snapshot.documents.mapNotNull { it.toObject(Budget::class.java) }
+                budgetsLiveData.value = budgets
+            }
         }
-        awaitClose { listener.remove() }
+        return budgetsLiveData
     }
 
-    fun getBudgetsForUser(userId: String): Flow<List<Budget>> = callbackFlow {
-        val listener = budgetsCollection
-            .whereEqualTo("userOwnerId", userId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null || snapshot == null) {
-                    close(error)
-                    return@addSnapshotListener
-                }
-                trySend(snapshot.toObjects())
-            }
-        awaitClose { listener.remove() }
+    // Call this when repository is no longer used to avoid memory leaks
+    fun clearListener() {
+        budgetsListener?.remove()
     }
 }

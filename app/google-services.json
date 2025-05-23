@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359679417030",
+    "project_id": "prog7313-poe-part3-94d3e",
+    "storage_bucket": "prog7313-poe-part3-94d3e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359679417030:android:993c40027e51ad96bc15c7",
+        "android_client_info": {
+          "package_name": "com.st10083866.prog7313_poe_personalbudgetapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUh5mtukopMQoEI-UGLCjnnJWKytikX_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -41,7 +41,7 @@ class EditCategoryFragment : Fragment() {
         }
 
         // Observe categories from Firestore
-        categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
+        categoryViewModel.getCategoriesForUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
             categoryList = categories
             val names = categories.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, names)

@@ -27,11 +27,10 @@ class TransactionViewModel : ViewModel() {
     val transaction: LiveData<Transaction?> get() = _transaction
 
     // Fetch all transactions for a user and update LiveData
-    fun getAllTransactions(userId: String) {
-        repository.getAllTransactions(userId).observeForever {
-            _transactions.postValue(it)
-        }
+    fun getAllTransactions(userId: String): LiveData<List<Transaction>> {
+        return repository.getAllTransactions(userId)
     }
+
 
     // Fetch transactions for a user between dates and update LiveData
     fun fetchTransactionsBetweenDates(userId: Int, fromDate: Long, toDate: Long) {

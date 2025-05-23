@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
+import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
 import com.st10083866.prog7313_poe_personalbudgetapp.repository.BudgetRepository
 import kotlinx.coroutines.launch
 
@@ -15,6 +16,8 @@ class BudgetViewModel : ViewModel() {
 
     // Expose budgets LiveData from repository
     val allBudgets: LiveData<List<Budget>> = repository.getAllBudgets()
+    val allCategories: LiveData<List<Category>> = repository.getAllCategories()
+
 
     private val _operationStatus = MutableLiveData<Boolean>()
     val operationStatus: LiveData<Boolean> get() = _operationStatus

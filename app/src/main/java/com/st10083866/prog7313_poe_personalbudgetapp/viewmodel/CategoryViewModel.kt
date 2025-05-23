@@ -54,4 +54,7 @@ class CategoryViewModel : ViewModel() {
             _categoryName.postValue(name)
         }
     }
+    fun getCategoriesByUser(userId: String): LiveData<List<Category>> {
+        return repository.getCategoriesByUser(userId)
+    }
 }

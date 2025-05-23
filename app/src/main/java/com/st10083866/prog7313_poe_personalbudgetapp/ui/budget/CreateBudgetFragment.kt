@@ -26,8 +26,8 @@ class CreateBudgetFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
 
     private lateinit var categorySpinner: Spinner
-    private var selectedCategoryId: Int? = null
-    private lateinit var categoryMap: Map<String, Int>
+    private var selectedCategoryId: String? = null
+    private lateinit var categoryMap: Map<String, String>
     private var userId: Int = -1
 
     override fun onCreateView(
@@ -46,7 +46,7 @@ class CreateBudgetFragment : Fragment() {
         userId = arguments?.getInt("USER_ID", -1) ?: -1
 
         // Observe categories and populate spinner
-        categoryViewModel.getAllCategories(userId.toString()).observe(viewLifecycleOwner) { categories ->
+        categoryViewModel.getCategoriesByUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
             val categoryNames = categories.map { it.name }
             categoryMap = categories.associateBy({ it.name }, { it.id })
 
@@ -90,7 +90,7 @@ class CreateBudgetFragment : Fragment() {
                     id = "", // Let repository generate ID if empty
                     totalAmount = total,
                     spendingLimit = limit,
-                    userOwnerId = userId,
+                    userOwnerId = userId.toString(),
                     categoryId = categoryId
                 )
                 viewModel.insertOrUpdate(newBudget)

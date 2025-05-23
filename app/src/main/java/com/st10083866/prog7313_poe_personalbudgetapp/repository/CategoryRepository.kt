@@ -83,4 +83,19 @@ class CategoryRepository {
                 onResult(null)
             }
     }
+
+
+    fun getCategoriesByUser(userId: String): LiveData<List<Category>> {
+        val liveData = MutableLiveData<List<Category>>()
+        categoriesRef.whereEqualTo("userOwnerId", userId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null || snapshot == null) {
+                    liveData.value = emptyList()
+                    return@addSnapshotListener
+                }
+                val categories = snapshot.documents.mapNotNull { it.toObject(Category::class.java) }
+                liveData.value = categories
+            }
+        return liveData
+    }
 }

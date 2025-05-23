@@ -16,6 +16,8 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.firebase.Timestamp
+import com.google.type.Date
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentAddExpensesBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
@@ -31,12 +33,13 @@ class AddExpensesFragment : Fragment() {
 
     private val transactionViewModel: TransactionViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
+
     private var selectedImagePath: String? = null
     private var userId: Int = -1
-    private var selectedCategoryId: Int? = null
+    private var selectedCategoryId: String? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {_binding =
-        FragmentAddExpensesBinding.inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentAddExpensesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -61,7 +64,7 @@ class AddExpensesFragment : Fragment() {
     }
 
     private fun createCategoryDropdown() {
-        categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
+        categoryViewModel.getCategoriesForUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
             if (categories.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "No categories found", Toast.LENGTH_SHORT).show()
                 return@observe
@@ -71,13 +74,10 @@ class AddExpensesFragment : Fragment() {
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-            val spinner = binding.spinnerCategory
-            spinner.adapter = adapter
-
-            // Optional: Set default category selection to the first item
+            binding.spinnerCategory.adapter = adapter
             selectedCategoryId = categories[0].id
 
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            binding.spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     selectedCategoryId = categories[position].id
                 }
@@ -127,18 +127,24 @@ class AddExpensesFragment : Fragment() {
             val dateMillis = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateStr)?.time ?: 0L
 
             val transaction = Transaction(
-                userOwnerId = userId,
+                id = "", // Firestore will auto-generate ID unless you're assigning one
+                userOwnerId = userId.toString(),
                 amount = amount,
                 type = type,
                 categoryId = selectedCategoryId,
-                date = dateMillis,
+                date = Timestamp(java.util.Date(dateMillis)),
                 paymentMethod = paymentMethod,
                 uploadedPicturePath = selectedImagePath
             )
 
-            transactionViewModel.addTransaction(transaction)
-            Toast.makeText(requireContext(), "Transaction added", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            transactionViewModel.insertTransaction(transaction) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Transaction added", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to add transaction", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -156,19 +162,7 @@ class AddExpensesFragment : Fragment() {
         }
     }
 
-private fun getPathFromUri(uri: Uri): String? {
-    val projection = arrayOf(MediaStore.Images.Media.DATA)
-    val cursor = requireContext().contentResolver.query(uri, projection, null, null, null)
-    cursor?.moveToFirst()
-    val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-    val path = columnIndex?.let { cursor.getString(it) }
-    cursor?.close()
-    return path
-}
-
-
-
-private fun createDatePicker() {
+    private fun createDatePicker() {
         binding.edtDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -184,4 +178,18 @@ private fun createDatePicker() {
         }
     }
 
+    private fun getPathFromUri(uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = requireContext().contentResolver.query(uri, projection, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        val path = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return path
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import com.google.firebase.Timestamp
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentEditSpendingBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
@@ -29,8 +30,8 @@ class EditSpendingFragment : Fragment() {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
 
-    private var transactionId: Int = -1
-    private var selectedCategoryId: Int? = null
+    private var transactionId: Int? = -1
+    private var selectedCategoryId: String? = null
     private var selectedImagePath: String? = null
     private var userId: Int = -1
 
@@ -43,6 +44,7 @@ class EditSpendingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         transactionId = arguments?.getInt("TRANSACTION_ID", -1) ?: -1
+
         userId = arguments?.getInt("USER_ID", -1) ?: -1
 
         if (transactionId == -1 || userId == -1) {
@@ -62,17 +64,20 @@ class EditSpendingFragment : Fragment() {
     }
 
     private fun loadTransaction() {
-        transactionViewModel.getTransactionById(transactionId).observe(viewLifecycleOwner) { txn ->
+        transactionId?.let { transactionViewModel.fetchTransactionById(it) }
+        transactionViewModel.transaction.observe(viewLifecycleOwner) { txn ->
             txn?.let { transactions ->
                 binding.edtAmount.setText(transactions.amount.toString())
-                binding.edtDate.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(transactions.date)))
+                val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(transactions.date.toDate())
+                binding.edtDate.setText(formattedDate)
                 selectedCategoryId = transactions.categoryId
                 selectedImagePath = transactions.uploadedPicturePath
 
                 if (transactions.type == "income") binding.checkIncome.isChecked = true
                 else binding.checkExpense.isChecked = true
 
-                val paymentOptions = resources.getStringArray(R.array.payment_methods)
+                val paymentOptions = resources.getStringArray(com.st10083866.prog7313_poe_personalbudgetapp.R.array.payment_methods)
                 val paymentIndex = paymentOptions.indexOfFirst { it == transactions.paymentMethod }
                 if (paymentIndex >= 0) binding.spinnerPaymentMethod.setSelection(paymentIndex)
 
@@ -84,8 +89,9 @@ class EditSpendingFragment : Fragment() {
             }
         }
     }
-    private fun loadCategories(selectedId: Int?) {
-        categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
+
+    private fun loadCategories(selectedId: String?) {
+        categoryViewModel.getCategoriesForUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
             val names = categories.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, names)
             binding.categoryDropdown.setAdapter(adapter)
@@ -174,27 +180,39 @@ class EditSpendingFragment : Fragment() {
             val dateMillis = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateStr)?.time ?: 0L
 
             val updatedTxn = Transaction(
-                id = transactionId,
-                userOwnerId = userId,
+                id = transactionId.toString(),
+                userOwnerId = userId.toString(),
                 amount = amount,
                 type = type,
                 categoryId = selectedCategoryId,
-                date = dateMillis,
+                date = Timestamp(java.util.Date(dateMillis)),
                 paymentMethod = paymentMethod,
                 uploadedPicturePath = selectedImagePath
             )
 
-            transactionViewModel.updateTransaction(updatedTxn)
-            Toast.makeText(requireContext(), "Transaction updated", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            transactionViewModel.updateTransaction(updatedTxn) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Transaction updated", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     private fun setupDeleteButton() {
         binding.btnDelete.setOnClickListener {
-            transactionViewModel.deleteTransactionById(transactionId)
-            Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            transactionId?.let { it1 ->
+                transactionViewModel.deleteTransactionById(it1) { success ->
+                    if (success) {
+                        Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show()
+                        requireActivity().supportFragmentManager.popBackStack()
+                    } else {
+                        Toast.makeText(requireContext(), "Delete failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 

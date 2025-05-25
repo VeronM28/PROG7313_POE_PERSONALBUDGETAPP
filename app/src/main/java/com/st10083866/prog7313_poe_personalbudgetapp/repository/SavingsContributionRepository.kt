@@ -1,5 +1,7 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObjects
@@ -10,32 +12,42 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class SavingsContributionRepository {
-
     private val db = FirebaseFirestore.getInstance()
-    private val contributionsCollection = db.collection("savings_contributions")
+    private val contributionsRef = db.collection("savings_contributions")
 
-    suspend fun insert(contribution: SavingsContribution) {
-        val docRef = if (contribution.id.isBlank()) {
-            contributionsCollection.document() // New doc with generated ID
-        } else {
-            contributionsCollection.document(contribution.id)
-        }
+    // Save a new contribution
+    fun insert(contribution: SavingsContribution, onResult: (Boolean) -> Unit) {
+        val docRef = contributionsRef.document(contribution.id.ifEmpty { contributionsRef.document().id })
         contribution.id = docRef.id
-        docRef.set(contribution).await()
+
+        docRef.set(contribution)
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
     }
 
-    fun getContributions(goalId: String): Flow<List<SavingsContribution>> = callbackFlow {
-        val listener = contributionsCollection
+    // Get all contributions for a goal ID (ordered by contributionDate descending)
+    fun getContributions(goalId: String): LiveData<List<SavingsContribution>> {
+        val liveData = MutableLiveData<List<SavingsContribution>>()
+
+        contributionsRef
             .whereEqualTo("goalId", goalId)
             .orderBy("contributionDate", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
-                if (error != null || snapshot == null) {
-                    close(error)
+                if (error != null) {
+                    liveData.postValue(emptyList())
                     return@addSnapshotListener
                 }
-                trySend(snapshot.toObjects())
+
+                if (snapshot != null && !snapshot.isEmpty) {
+                    val contributions = snapshot.documents.mapNotNull {
+                        it.toObject(SavingsContribution::class.java)
+                    }
+                    liveData.postValue(contributions)
+                } else {
+                    liveData.postValue(emptyList())
+                }
             }
 
-        awaitClose { listener.remove() }
+        return liveData
     }
 }

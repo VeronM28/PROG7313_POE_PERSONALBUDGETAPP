@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityCreateSavingsContributionBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsContributionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
 
 class CreateSavingsContributionFragment : Fragment() {
@@ -20,9 +21,11 @@ class CreateSavingsContributionFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val savingsGoalViewModel: SavingsGoalViewModel by viewModels()
-    private var userId: Int = -1
+    private val savingsContributionViewModel: SavingsContributionViewModel by viewModels()
+
+    private var userId: String = ""
     private var goalsList = listOf<SavingsGoal>()
-    private var selectedGoalId: Int = -1
+    private var selectedGoalId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,10 +39,10 @@ class CreateSavingsContributionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            userId = it.getInt("USER_ID", -1)
+            userId = it.getString("USER_ID", "")
         }
 
-        if (userId != -1) {
+        if (userId.isNotEmpty()) {
             loadGoalsForUser(userId)
         }
 
@@ -48,7 +51,7 @@ class CreateSavingsContributionFragment : Fragment() {
         }
     }
 
-    private fun loadGoalsForUser(userId: Int) {
+    private fun loadGoalsForUser(userId: String) {
         savingsGoalViewModel.getSavingsGoals(userId).observe(viewLifecycleOwner) { goals ->
             if (goals.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "No goals found. Create a goal first!", Toast.LENGTH_SHORT).show()
@@ -63,14 +66,13 @@ class CreateSavingsContributionFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.goalTypeSpinner.adapter = adapter
 
-            binding.goalTypeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                        selectedGoalId = goalsList[position].id
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>) {}
+            binding.goalTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    selectedGoalId = goalsList[position].id
                 }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
         }
     }
 
@@ -78,7 +80,7 @@ class CreateSavingsContributionFragment : Fragment() {
         val amount = binding.edtAmount.text.toString().toDoubleOrNull()
         val date = binding.edtDate.text.toString()
 
-        if (selectedGoalId == -1 || amount == null || date.isBlank()) {
+        if (selectedGoalId.isBlank() || amount == null || date.isBlank()) {
             Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -89,10 +91,14 @@ class CreateSavingsContributionFragment : Fragment() {
             contributionDate = date
         )
 
-        savingsGoalViewModel.addContribution(contribution)
-
-        Toast.makeText(requireContext(), "Contribution added!", Toast.LENGTH_SHORT).show()
-        requireActivity().supportFragmentManager.popBackStack()
+        savingsContributionViewModel.addContribution(contribution) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Contribution added!", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(requireContext(), "Failed to add contribution", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroyView() {

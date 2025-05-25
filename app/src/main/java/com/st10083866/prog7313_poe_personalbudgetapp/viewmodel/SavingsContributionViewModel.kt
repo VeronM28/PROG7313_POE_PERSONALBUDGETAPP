@@ -1,5 +1,6 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
@@ -9,18 +10,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SavingsContributionViewModel(private val repository: SavingsContributionRepository) : ViewModel() {
+class SavingsContributionViewModel : ViewModel() {
 
-    private val _contributions = MutableStateFlow<List<SavingsContribution>>(emptyList())
-    val contributions: StateFlow<List<SavingsContribution>> = _contributions.asStateFlow()
+    private val repository = SavingsContributionRepository()
 
-    fun insertContribution(contribution: SavingsContribution) = viewModelScope.launch {
-        repository.insert(contribution)
+
+    fun addContribution(contribution: SavingsContribution, onResult: (Boolean) -> Unit) {
+        repository.insert(contribution, onResult)
     }
 
-    fun loadContributions(goalId: String) = viewModelScope.launch {
-        repository.getContributions(goalId).collect {
-            _contributions.value = it
-        }
+
+    fun getContributionsForGoal(goalId: String): LiveData<List<SavingsContribution>> {
+        return repository.getContributions(goalId)
     }
 }

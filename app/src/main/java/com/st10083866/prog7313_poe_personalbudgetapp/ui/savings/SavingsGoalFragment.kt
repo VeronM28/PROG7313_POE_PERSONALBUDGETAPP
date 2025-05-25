@@ -23,8 +23,8 @@ class SavingsGoalFragment : Fragment() {
     private val viewModel: SavingsGoalViewModel by viewModels()
     private lateinit var adapter: ContributionsAdapter
     private var goalList: List<SavingsGoal> = listOf()
-    private var selectedGoalId = -1
-    private var userId = -1
+    private var selectedGoalId: String = ""
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,14 +37,16 @@ class SavingsGoalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Receive userId from arguments (Firestore expects String)
         arguments?.let {
-            userId = it.getInt("USER_ID", -1)
+            userId = it.getString("USER_ID", "")
         }
 
         adapter = ContributionsAdapter(emptyList())
         binding.contributionsRecyclerView.adapter = adapter
         binding.contributionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        // Observe savings goals for this user
         viewModel.getSavingsGoals(userId).observe(viewLifecycleOwner) { goals ->
             goalList = goals
             val names = goals.map { it.goalName }
@@ -72,7 +74,11 @@ class SavingsGoalFragment : Fragment() {
     private fun updateProgress(goal: SavingsGoal) {
         viewModel.getContributions(goal.id).observe(viewLifecycleOwner) { contributions ->
             val totalSaved = contributions.sumOf { it.amount }
-            val progress = ((totalSaved / goal.targetAmount) * 100).toInt()
+            val progress = if (goal.targetAmount > 0) {
+                ((totalSaved / goal.targetAmount) * 100).toInt()
+            } else {
+                0
+            }
 
             binding.txtAmount.text = "R${totalSaved.toInt()}"
             binding.txtProgress.text = "You've saved $progress% of your goal!"
@@ -80,7 +86,7 @@ class SavingsGoalFragment : Fragment() {
         }
     }
 
-    private fun loadContributions(goalId: Int) {
+    private fun loadContributions(goalId: String) {
         viewModel.getContributions(goalId).observe(viewLifecycleOwner) { contributions ->
             adapter.updateList(contributions)
         }

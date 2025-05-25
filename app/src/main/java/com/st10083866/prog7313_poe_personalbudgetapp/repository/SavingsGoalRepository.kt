@@ -1,6 +1,9 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObjects
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
@@ -8,34 +11,50 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class SavingsGoalRepository {
-
     private val db = FirebaseFirestore.getInstance()
-    private val goalsCollection = db.collection("savings_goals")
+    private val goalsRef = db.collection("savings_goals")
 
-    suspend fun insert(goal: SavingsGoal) {
-        val docRef = if (goal.id.isBlank()) {
-            goalsCollection.document() // Create new doc
-        } else {
-            goalsCollection.document(goal.id)
+    private var goalsListener: ListenerRegistration? = null
+
+    // Insert a new savings goal
+    fun insert(goal: SavingsGoal, onResult: (Boolean) -> Unit) {
+        if (goal.id.isBlank()) {
+            goal.id = UUID.randomUUID().toString()
         }
-        goal.id = docRef.id
-        docRef.set(goal).await()
+
+        goalsRef.document(goal.id).set(goal)
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
     }
 
-    fun getGoals(userId: String): Flow<List<SavingsGoal>> = callbackFlow {
-        val listener = goalsCollection
+    // Get LiveData of all savings goals for a specific user
+    fun getGoals(userId: String): LiveData<List<SavingsGoal>> {
+        val liveData = MutableLiveData<List<SavingsGoal>>()
+
+        // Remove previous listener if any
+        goalsListener?.remove()
+
+        goalsListener = goalsRef
             .whereEqualTo("userOwnerId", userId)
-            .orderBy("createdAt", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null || snapshot == null) {
-                    close(error)
+                    liveData.postValue(emptyList())
                     return@addSnapshotListener
                 }
-                trySend(snapshot.toObjects())
+
+                val goals = snapshot.documents.mapNotNull { it.toObject(SavingsGoal::class.java) }
+                liveData.postValue(goals)
             }
 
-        awaitClose { listener.remove() }
+        return liveData
+    }
+
+    // Clean up listener when not needed
+    fun removeGoalsListener() {
+        goalsListener?.remove()
+        goalsListener = null
     }
 }

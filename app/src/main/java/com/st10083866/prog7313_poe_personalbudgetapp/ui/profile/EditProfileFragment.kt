@@ -14,23 +14,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityEditProfileBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentEditProfileBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
 import java.io.File
 
 class EditProfileFragment : Fragment() {
 
-    private var _binding: ActivityEditProfileBinding? = null
+    private var _binding: FragmentEditProfileBinding? = null
     private val binding get() = _binding!!
 
     private val profileViewModel: LoginViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
     private var selectedProfilePicturePath: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityEditProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 

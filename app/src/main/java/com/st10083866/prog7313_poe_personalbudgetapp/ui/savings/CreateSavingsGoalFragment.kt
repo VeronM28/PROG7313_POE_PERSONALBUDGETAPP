@@ -8,7 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityCreateSavingsGoalBinding
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentCreateSavingsGoalBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -16,17 +17,17 @@ import java.util.Locale
 
 class CreateSavingsGoalFragment : Fragment() {
 
-    private var _binding: ActivityCreateSavingsGoalBinding? = null
+    private var _binding: FragmentCreateSavingsGoalBinding? = null
     private val binding get() = _binding!!
 
     private val savingsGoalViewModel: SavingsGoalViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityCreateSavingsGoalBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateSavingsGoalBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,7 +35,7 @@ class CreateSavingsGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            userId = it.getInt("USER_ID", -1)
+            userId = it.getString("USER_ID", "") ?: ""
         }
 
         binding.btnCreateGoal.setOnClickListener {
@@ -55,10 +56,14 @@ class CreateSavingsGoalFragment : Fragment() {
                 createdAt = getCurrentDate()
             )
 
-            savingsGoalViewModel.addSavingsGoal(newGoal)
-
-            Toast.makeText(requireContext(), "Goal created!", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            savingsGoalViewModel.insertSavingsGoal(newGoal) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Goal created!", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to create goal", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

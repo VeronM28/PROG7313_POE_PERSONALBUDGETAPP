@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityProfilePageBinding
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentProfilePageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
 import java.io.File
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: ActivityProfilePageBinding? = null
+    private var _binding: FragmentProfilePageBinding? = null
+
     private val binding get() = _binding!!
 
     private val profileViewModel: LoginViewModel by viewModels()
@@ -23,7 +25,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityProfilePageBinding.inflate(inflater, container, false)
+        _binding = FragmentProfilePageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -35,7 +37,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (userId != -1) {
-            profileViewModel.loadUserById(userId)
+            profileViewModel.loadUserById(userId.toString())
         }
 
         profileViewModel.user.observe(viewLifecycleOwner) { user ->

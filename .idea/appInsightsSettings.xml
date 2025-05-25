@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.st10083866.prog7313_poe_personalbudgetapp" />
+                  <option name="mobileSdkAppId" value="1:359679417030:android:993c40027e51ad96bc15c7" />
+                  <option name="projectId" value="prog7313-poe-part3-94d3e" />
+                  <option name="projectNumber" value="359679417030" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

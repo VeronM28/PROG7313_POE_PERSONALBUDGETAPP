@@ -71,8 +71,9 @@ class RegPageFragment : Fragment() {
         )
 
         // Call repository via ViewModel to insert user into Firestore
-        loginViewModel.registerUser(user) { success ->
-            if (success) {
+        loginViewModel.registerUser(user, password) { success ->
+
+        if (success) {
                 Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT).show()
 
 

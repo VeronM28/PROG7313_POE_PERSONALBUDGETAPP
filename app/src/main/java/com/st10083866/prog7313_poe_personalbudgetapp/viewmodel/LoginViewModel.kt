@@ -13,16 +13,17 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
 
-    // Login using email and passwordHash
-    fun loginUser(email: String, passwordHash: String) {
-        userRepository.login(email, passwordHash) { resultUser ->
-            _user.postValue(resultUser)
-        }
+    // Register user
+    fun registerUser(user: User, password: String, onResult: (Boolean) -> Unit) {
+        userRepository.registerUser(user, password, onResult)
     }
 
-    // Register user
-    fun registerUser(user: User, onResult: (Boolean) -> Unit) {
-        userRepository.insertUser(user, onResult)
+
+    // Login using email and passwordHash
+    fun loginUser(email: String, password: String) {
+        userRepository.login(email, password) { loggedInUser ->
+            _user.postValue(loggedInUser)
+        }
     }
 
     // Load user by Firestore ID (String)

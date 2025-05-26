@@ -1,6 +1,7 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
@@ -31,11 +35,13 @@ class MainPageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainPageBinding
     private lateinit var userId: String
+    private val TAG = "FIREBASE_AUTH"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        FirebaseApp.initializeApp(this)
         binding = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -129,7 +135,45 @@ class MainPageActivity : AppCompatActivity() {
         )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        testAuth()
+
+
     }
+    private fun testAuth() {
+        val auth = FirebaseAuth.getInstance()
+        val email = "testuser@example.com"
+        val password = "TestPass123"
+
+        // Try to create a user
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                Log.d(TAG, "User created: ${it.user?.uid}")
+
+                // Now try to sign in
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnSuccessListener { loginResult ->
+                        Log.d(TAG, "Login success: ${loginResult.user?.email}")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Login failed: ${e.message}")
+                    }
+
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "User creation failed: ${e.message}")
+
+                // Try logging in in case the user already exists
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnSuccessListener { loginResult ->
+                        Log.d(TAG, "Login success (existing user): ${loginResult.user?.email}")
+                    }
+                    .addOnFailureListener { loginError ->
+                        Log.e(TAG, "Login failed (existing user): ${loginError.message}")
+                    }
+            }
+    }
+
 
 
     private fun loadFragment(fragment: Fragment){

@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
 
-    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
+    id("com.google.devtools.ksp") version "1.8.20-1.0.11"
     alias(libs.plugins.google.gms.google.services)
 }
 

@@ -11,13 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityCreateSavingsContributionBinding
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentCreateSavingsContributionBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentCreateSavingsGoalBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsContributionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
 
 class CreateSavingsContributionFragment : Fragment() {
 
-    private var _binding: ActivityCreateSavingsContributionBinding? = null
+    private var _binding: FragmentCreateSavingsContributionBinding? = null
     private val binding get() = _binding!!
 
     private val savingsGoalViewModel: SavingsGoalViewModel by viewModels()
@@ -31,7 +33,7 @@ class CreateSavingsContributionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityCreateSavingsContributionBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateSavingsContributionBinding.inflate(inflater, container, false)
         return binding.root
     }
 

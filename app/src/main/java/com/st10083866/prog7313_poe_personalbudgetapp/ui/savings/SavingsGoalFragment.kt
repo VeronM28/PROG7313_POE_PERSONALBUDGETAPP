@@ -12,12 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivitySavingsGoalPageBinding
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentSavingsGoalPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
 
 class SavingsGoalFragment : Fragment() {
 
-    private var _binding: ActivitySavingsGoalPageBinding? = null
+    private var _binding: FragmentSavingsGoalPageBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SavingsGoalViewModel by viewModels()
@@ -30,7 +31,7 @@ class SavingsGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivitySavingsGoalPageBinding.inflate(inflater, container, false)
+        _binding = FragmentSavingsGoalPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 

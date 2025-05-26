@@ -4,18 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLaunchpageBinding
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentLaunchpageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.LoginPageFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.RegPageFragment
 
-class LaunchPageActivity : AppCompatActivity() {
+class LaunchPageFragment : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLaunchpageBinding
+    private var _binding: FragmentLaunchpageBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLaunchpageBinding.inflate(layoutInflater)
+        _binding = FragmentLaunchpageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)

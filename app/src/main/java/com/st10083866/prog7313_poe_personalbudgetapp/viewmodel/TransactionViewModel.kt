@@ -33,7 +33,7 @@ class TransactionViewModel : ViewModel() {
 
 
     // Fetch transactions for a user between dates and update LiveData
-    fun fetchTransactionsBetweenDates(userId: Int, fromDate: Long, toDate: Long) {
+    fun fetchTransactionsBetweenDates(userId: String, fromDate: Long, toDate: Long) {
         repository.getTransactionsForUserBetweenDates(userId, fromDate, toDate).observeForever {
             _transactions.postValue(it)
         }

@@ -78,7 +78,7 @@ class TransactionRepository {
     }
 
     // Get transactions for user between two dates ordered by date descending
-    fun getTransactionsForUserBetweenDates(userId: Int, fromDate: Long, toDate: Long): LiveData<List<Transaction>> {
+    fun getTransactionsForUserBetweenDates(userId: String, fromDate: Long, toDate: Long): LiveData<List<Transaction>> {
         val liveData = MutableLiveData<List<Transaction>>()
         transactionsRef
             .whereEqualTo("userOwnerId", userId)

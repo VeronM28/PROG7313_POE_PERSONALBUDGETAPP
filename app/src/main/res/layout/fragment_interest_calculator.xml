@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InterestCalculatorFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Interest Calculator"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Principal -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_principal" />
+
+            <EditText
+                android:id="@+id/etPrincipal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/hint_principal" />
+
+            <!-- Annual Rate -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_annual_rate" />
+
+            <EditText
+                android:id="@+id/etRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/hint_annual_rate" />
+
+            <!-- Time -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_time" />
+
+            <EditText
+                android:id="@+id/etTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/hint_time" />
+
+            <!-- Frequency -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_frequency" />
+
+            <EditText
+                android:id="@+id/etFrequency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:inputType="number"
+                android:hint="@string/hint_frequency" />
+
+            <!-- Radio Buttons -->
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="12dp">
+
+                <RadioButton
+                    android:id="@+id/rbSimple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Simple Interest" />
+
+                <RadioButton
+                    android:id="@+id/rbCompound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Compound Interest"
+                    android:layout_marginStart="24dp" />
+            </RadioGroup>
+
+            <!-- Buttons -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCalculate"
+                android:layout_width="180dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/gradient_background"
+                android:backgroundTint="@null"
+                android:text="@string/button_calculate"
+                android:visibility="visible"
+                app:backgroundTint="@null"
+                app:cornerRadius="50dp" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReset"
+                android:layout_width="180dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/gradient_background"
+                android:backgroundTint="@null"
+                android:text="@string/button_reset"
+                android:visibility="visible"
+                app:backgroundTint="@null"
+                app:cornerRadius="50dp" />
+
+
+            <!-- Result -->
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_interest"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

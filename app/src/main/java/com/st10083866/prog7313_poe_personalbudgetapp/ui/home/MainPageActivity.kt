@@ -30,7 +30,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.AddExpenses
 class MainPageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainPageBinding
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class MainPageActivity : AppCompatActivity() {
 
         //loads userID from saved session
         val session = SessionManager(this)
-        userId = intent.getIntExtra("USER_ID", session.getUserId())
+        userId = intent.getStringExtra("USER_ID") ?: session.getUserId() ?: "-1"
 
         //default fragment
         loadFragment(HomeFragment().withUser(userId))
@@ -134,8 +134,8 @@ class MainPageActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
-    fun Fragment.withUser(userId: Int): Fragment {
-        arguments = Bundle().apply { putInt("USER_ID", userId) }
+    fun Fragment.withUser(userId: String): Fragment {
+        arguments = Bundle().apply { putString("USER_ID", userId) }
         return this
     }
 

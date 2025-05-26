@@ -17,7 +17,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: LoginViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +30,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            userId = it.getInt("USER_ID", -1)
-        }
+        userId = arguments?.getString("USER_ID") ?: "-1"
 
-        if (userId != -1) {
+        if (userId != "-1") {
             profileViewModel.loadUserById(userId)
         }
 

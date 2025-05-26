@@ -28,7 +28,7 @@ class BudgetOverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBudgetOverviewBinding.inflate(inflater, container, false)
-        userId = arguments?.getString("USER_ID") ?: ""
+        userId = arguments?.getString("USER_ID") ?: "-1"
         return binding.root
     }
 

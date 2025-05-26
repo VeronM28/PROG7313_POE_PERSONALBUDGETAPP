@@ -16,7 +16,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.BudgetViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import java.util.Calendar
 
-class BudgetOverviewFragment : Fragment() {
+class CategoryOverviewFragment : Fragment() {
 
     private lateinit var binding: FragmentCategoryOverviewBinding
     private val transactionViewModel: TransactionViewModel by viewModels()

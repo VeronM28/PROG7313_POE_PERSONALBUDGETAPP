@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.User
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityEditProfileBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
 import java.io.File
@@ -23,7 +24,7 @@ class EditProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: LoginViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
     private var selectedProfilePicturePath: String? = null
 
     override fun onCreateView(
@@ -37,11 +38,9 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            userId = it.getInt("USER_ID", -1)
-        }
+        userId = arguments?.getString("USER_ID") ?: "-1"
 
-        if (userId != -1) {
+        if (userId != "-1") {
             profileViewModel.loadUserById(userId)
         }
 
@@ -109,15 +108,22 @@ class EditProfileFragment : Fragment() {
             return
         }
 
-        profileViewModel.updateUser(
-            userId,
-            newUsername,
-            newEmail,
-            newPassword,
-            selectedProfilePicturePath ?: ""
+        val updatedUser = User(
+            userId =  userId,
+            username = newUsername,
+            email = newEmail,
+            passwordHash = newPassword,
+            profilePicturePath =  selectedProfilePicturePath ?: ""
         )
 
-        Toast.makeText(requireContext(), "Profile Updated!", Toast.LENGTH_SHORT).show()
+        profileViewModel.updateUser(updatedUser) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         requireActivity().supportFragmentManager.popBackStack()
     }
 

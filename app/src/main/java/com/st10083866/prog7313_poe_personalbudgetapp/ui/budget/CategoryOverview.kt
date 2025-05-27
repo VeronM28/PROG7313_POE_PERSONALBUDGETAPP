@@ -34,7 +34,8 @@ class CategoryOverviewFragment : Fragment() {
         Color.parseColor("#8BC34A")
     )
 
-    private var userId: Int = -1
+    private var userId: String = ""
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentCategoryOverviewBinding.inflate(inflater, container, false)
@@ -44,11 +45,12 @@ class CategoryOverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
-        if (userId == -1) {
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
             Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
             return
         }
+
         setupDatePickers()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

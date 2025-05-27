@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
 
-    id("com.google.devtools.ksp") version "1.8.20-1.0.11"
+    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

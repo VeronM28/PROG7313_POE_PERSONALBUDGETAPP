@@ -40,7 +40,7 @@ class TransactionViewModel : ViewModel() {
     }
 
     // Fetch a single transaction by ID and update LiveData
-    fun fetchTransactionById(id: Int) {
+    fun fetchTransactionById(id: String) {
         repository.getTransactionById(id).observeForever {
             _transaction.postValue(it)
         }
@@ -57,7 +57,7 @@ class TransactionViewModel : ViewModel() {
     }
 
     // Delete a transaction by ID
-    fun deleteTransactionById(id: Int, callback: (Boolean) -> Unit) {
+    fun deleteTransactionById(id: String, callback: (Boolean) -> Unit) {
         repository.deleteTransactionById(id, callback)
     }
 }

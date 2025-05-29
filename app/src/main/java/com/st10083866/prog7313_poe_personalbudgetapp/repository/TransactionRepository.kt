@@ -19,7 +19,8 @@ class TransactionRepository {
     // Insert a transaction
     fun insert(transaction: Transaction, onComplete: (Boolean) -> Unit) {
         // Use Firestore document ID = transaction.id or auto-generated if null
-        val docId = transaction.id.toString() ?: transactionsRef.document().id
+        val docId = if (transaction.id.isBlank()) transactionsRef.document().id else transaction.id
+        transaction.id = docId
         transactionsRef.document(docId).set(transaction)
             .addOnSuccessListener { onComplete(true) }
             .addOnFailureListener { onComplete(false) }
@@ -35,14 +36,14 @@ class TransactionRepository {
     }
 
     // Delete transaction by ID
-    fun deleteTransactionById(id: Int, onComplete: (Boolean) -> Unit) {
+    fun deleteTransactionById(id: String, onComplete: (Boolean) -> Unit) {
         transactionsRef.document(id.toString()).delete()
             .addOnSuccessListener { onComplete(true) }
             .addOnFailureListener { onComplete(false) }
     }
 
     // Get transaction by ID
-    fun getTransactionById(id: Int): LiveData<Transaction?> {
+    fun getTransactionById(id: String): LiveData<Transaction?> {
         val liveData = MutableLiveData<Transaction?>()
         transactionsRef.document(id.toString())
             .addSnapshotListener { snapshot, error ->

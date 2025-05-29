@@ -35,18 +35,26 @@ class ActivityLogFragment : Fragment() {
 
     private var fromDate: String = ""
     private var toDate: String = ""
-    private var userId: String = "" // replace with actual user ID from arguments if needed
+    private var userId: String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLogPageBinding.inflate(inflater, container, false)
+
         return binding.root
     }
     //this function initializes the screen layout and logic for how the screen elements behave
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userId = arguments?.getString("USER_ID") ?: ""
+
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
+        }
         //displays all transaction logs
         adapter = ActivityLogAdapter(
             categoryViewModel,

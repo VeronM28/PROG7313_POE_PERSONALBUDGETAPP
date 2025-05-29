@@ -1,5 +1,6 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.ui.savings
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,9 @@ import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentCreateS
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentCreateSavingsGoalBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsContributionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
+import com.google.firebase.Timestamp
+import java.util.Calendar
+import java.util.Date
 
 class CreateSavingsContributionFragment : Fragment() {
 
@@ -28,6 +32,7 @@ class CreateSavingsContributionFragment : Fragment() {
     private var userId: String = ""
     private var goalsList = listOf<SavingsGoal>()
     private var selectedGoalId: String = ""
+    private var selectedDate: Timestamp = Timestamp.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +53,23 @@ class CreateSavingsContributionFragment : Fragment() {
 
         if (userId.isNotEmpty()) {
             loadGoalsForUser(userId)
+        }
+
+        binding.edtDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePicker = DatePickerDialog(requireContext(), { _, selYear, selMonth, selDay ->
+                calendar.set(selYear, selMonth, selDay)
+                selectedDate = Timestamp(Date(calendar.timeInMillis))
+
+                // Shows selected date in EditText
+                binding.edtDate.setText("$selDay/${selMonth + 1}/$selYear")
+            }, year, month, day)
+
+            datePicker.show()
         }
 
         binding.btnAddContribution.setOnClickListener {
@@ -82,9 +104,8 @@ class CreateSavingsContributionFragment : Fragment() {
 
     private fun saveContribution() {
         val amount = binding.edtAmount.text.toString().toDoubleOrNull()
-        val date = binding.edtDate.text.toString()
 
-        if (selectedGoalId.isBlank() || amount == null || date.isBlank()) {
+        if (selectedGoalId.isBlank() || amount == null) {
             Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -92,7 +113,7 @@ class CreateSavingsContributionFragment : Fragment() {
         val contribution = SavingsContribution(
             goalId = selectedGoalId,
             amount = amount,
-            contributionDate = date
+            contributionDate = selectedDate
         )
 
         savingsContributionViewModel.addContribution(contribution) { success ->

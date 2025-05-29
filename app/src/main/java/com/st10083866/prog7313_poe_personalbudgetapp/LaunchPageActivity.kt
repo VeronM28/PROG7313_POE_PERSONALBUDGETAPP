@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLaunchpageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.home.MainPageActivity
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.loginReg.LoginPageFragment
@@ -51,5 +52,16 @@ class LaunchPageActivity : AppCompatActivity() {
             .replace(R.id.fragmentContainer, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val intent = Intent(this, MainPageActivity::class.java)
+            intent.putExtra("USER_ID", user.uid)
+            startActivity(intent)
+            finish()
+        }
     }
 }

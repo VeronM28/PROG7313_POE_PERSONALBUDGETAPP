@@ -3,6 +3,7 @@ package com.st10083866.prog7313_poe_personalbudgetapp.ui.budget
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,11 +62,13 @@ class CategoryOverviewFragment : Fragment() {
 
         // Use ViewModel's existing method to fetch filtered data
         transactionViewModel.fetchTransactionsBetweenDates(userId, fromTimestamp, toTimestamp)
-
+        Log.d("FilterParams", "userId=$userId, from=$fromTimestamp, to=$toTimestamp")
         transactionViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
             budgetViewModel.allBudgets.observe(viewLifecycleOwner) { budgets ->
                 budgetViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
-
+                    Log.d("CategoryOverview", "Transactions: ${transactions.size}")
+                    Log.d("CategoryOverview", "Budgets: ${budgets.size}")
+                    Log.d("CategoryOverview", "Categories: ${categories.size}")
                     val categorySpendMap: Map<String, Float> = transactions
                         .filter { it.type.equals("expense", ignoreCase = true) }
                         .groupBy { it.categoryId ?: "Uncategorized" }

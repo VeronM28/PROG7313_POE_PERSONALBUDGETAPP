@@ -20,6 +20,7 @@ import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityMainPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.BudgetOverviewFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.CategoryOverviewFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.CreateBudgetFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.budget.EditBudgetFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.category.CategoryFragment
@@ -114,7 +115,7 @@ class MainPageActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_budget -> {
-                    loadFragment(BudgetOverviewFragment().withUser(userId))
+                    loadFragment(CategoryOverviewFragment().withUser(userId))
 
                     true
                 }

@@ -7,6 +7,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
+import com.google.firebase.Timestamp
+import java.util.Date
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -81,10 +83,14 @@ class TransactionRepository {
     // Get transactions for user between two dates ordered by date descending
     fun getTransactionsForUserBetweenDates(userId: String, fromDate: Long, toDate: Long): LiveData<List<Transaction>> {
         val liveData = MutableLiveData<List<Transaction>>()
+
+        val fromTimestamp = Timestamp(Date(fromDate))
+        val toTimestamp = Timestamp(Date(toDate))
+
         transactionsRef
             .whereEqualTo("userOwnerId", userId)
-            .whereGreaterThanOrEqualTo("date", fromDate)
-            .whereLessThanOrEqualTo("date", toDate)
+            .whereGreaterThanOrEqualTo("date", fromTimestamp)
+            .whereLessThanOrEqualTo("date", toTimestamp)
             .orderBy("date", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, error ->
                 if (error != null || snapshots == null) {

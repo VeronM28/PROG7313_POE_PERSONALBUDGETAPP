@@ -34,8 +34,10 @@ class CreateSavingsGoalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            userId = it.getString("USER_ID", "") ?: ""
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
         }
 
         binding.btnCreateGoal.setOnClickListener {

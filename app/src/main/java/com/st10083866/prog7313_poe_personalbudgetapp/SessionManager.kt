@@ -22,6 +22,6 @@ class SessionManager(context: Context) {
     }
 
     fun isLoggedIn(): Boolean {
-        return getUserId() != "-1"
+        return !getUserId().isNullOrEmpty()
     }
 }

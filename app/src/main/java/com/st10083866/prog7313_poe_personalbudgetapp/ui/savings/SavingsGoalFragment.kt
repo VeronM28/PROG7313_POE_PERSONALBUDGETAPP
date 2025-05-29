@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,8 +40,10 @@ class SavingsGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Receive userId from arguments (Firestore expects String)
-        arguments?.let {
-            userId = it.getString("USER_ID", "")
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
         }
 
         adapter = ContributionsAdapter(emptyList())

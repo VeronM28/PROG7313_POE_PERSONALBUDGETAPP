@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentBudgetOverviewBinding
@@ -28,7 +29,10 @@ class BudgetOverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBudgetOverviewBinding.inflate(inflater, container, false)
-        userId = arguments?.getString("USER_ID") ?: "-1"
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+        }
         return binding.root
     }
 

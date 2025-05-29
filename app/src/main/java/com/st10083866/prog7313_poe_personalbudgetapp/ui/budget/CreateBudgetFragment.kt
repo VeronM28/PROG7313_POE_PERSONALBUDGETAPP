@@ -28,7 +28,7 @@ class CreateBudgetFragment : Fragment() {
     private lateinit var categorySpinner: Spinner
     private var selectedCategoryId: String? = null
     private lateinit var categoryMap: Map<String, String>
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,11 @@ class CreateBudgetFragment : Fragment() {
         val btnAddBudget = view.findViewById<Button>(R.id.addBudgetButton)
         categorySpinner = view.findViewById(R.id.categorySpinner)
 
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Observe categories and populate spinner
         categoryViewModel.getCategoriesByUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
@@ -84,7 +88,7 @@ class CreateBudgetFragment : Fragment() {
             val limit = etSpendLimit.text.toString().toDoubleOrNull()
             val categoryId = selectedCategoryId
 
-            if (total != null && limit != null && categoryId != null && userId != -1) {
+            if (total != null && limit != null && categoryId != null && userId.isNotBlank()) {
                 // Generate an ID in Budget if you want; Firestore repo will handle if empty
                 val newBudget = Budget(
                     id = "", // Let repository generate ID if empty

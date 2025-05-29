@@ -20,7 +20,7 @@ class CategoryFragment : Fragment() {
     private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +32,8 @@ class CategoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
-        if (userId == -1) {
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
             Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
             return
         }

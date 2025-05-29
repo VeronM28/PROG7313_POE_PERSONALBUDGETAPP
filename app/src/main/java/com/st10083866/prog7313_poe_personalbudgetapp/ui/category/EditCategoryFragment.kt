@@ -22,7 +22,7 @@ class EditCategoryFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var categoryList = listOf<Category>()
     private var selectedCategory: Category? = null
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +34,8 @@ class EditCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
-        if (userId == -1) {
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
             Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
             return
         }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ContributionsAdapter(
@@ -29,7 +30,7 @@ class ContributionsAdapter(
         val contribution = items[position]
         val formattedAmount = NumberFormat.getCurrencyInstance(Locale("en", "ZA")).format(contribution.amount)
         holder.amountText.text = formattedAmount
-        holder.dateText.text = contribution.contributionDate
+        holder.dateText.text = contribution.contributionDate.toDate().toString()
     }
 
     override fun getItemCount(): Int = items.size

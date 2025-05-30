@@ -25,6 +25,8 @@
             android:layout_marginEnd="16dp" />
 
         <!-- Details -->
+
+        <!-- Amount and Type -->
         <LinearLayout
             android:layout_width="193dp"
             android:layout_height="wrap_content"
@@ -48,20 +50,35 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnViewImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="View Image" />
+                android:layout_width="232dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/gradient_background"
+                android:backgroundTint="@null"
+                android:text="View Image"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                app:backgroundTint="@null"
+                app:cornerRadius="50dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditEntry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Edit Entry" />
+                android:layout_width="224dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/gradient_background"
+                android:backgroundTint="@null"
+                android:text="Edit Entry"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                app:backgroundTint="@null"
+                app:cornerRadius="50dp" />
         </LinearLayout>
 
-        <!-- Amount and Type -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

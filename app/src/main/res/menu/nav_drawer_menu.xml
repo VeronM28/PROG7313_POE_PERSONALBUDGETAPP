@@ -45,7 +45,12 @@
         <item
             android:id="@+id/navEditCategory"
             android:title="Edit Category" />
-
+        <item
+            android:id="@+id/navInterestCalculator"
+            android:title="Intrest Calculator" />
+        <item
+            android:id="@+id/navHelpPage"
+            android:title="Help Page" />
 
 
 

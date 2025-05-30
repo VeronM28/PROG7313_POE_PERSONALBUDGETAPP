@@ -22,29 +22,33 @@ class EditCategoryFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var categoryList = listOf<Category>()
     private var selectedCategory: Category? = null
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout using the FragmentEditCategoryBinding
+    ): View {
         _binding = FragmentEditCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
-        // Observing the categories list
-        categoryViewModel.allCategories(userId).observe(viewLifecycleOwner) { categories ->
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Observe categories from Firestore
+        categoryViewModel.getCategoriesForUser(userId.toString()).observe(viewLifecycleOwner) { categories ->
             categoryList = categories
             val names = categories.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, names)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerCategories.adapter = adapter
         }
-        // Spinner selection listener
+
         binding.spinnerCategories.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedCategory = categoryList[position]
@@ -63,7 +67,6 @@ class EditCategoryFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Edit button click listener
         binding.btnEditCategory.setOnClickListener {
             selectedCategory?.let { cat ->
                 val updatedCategory = cat.copy(
@@ -72,15 +75,14 @@ class EditCategoryFragment : Fragment() {
                     limit = binding.etEditLimit.text.toString().toDoubleOrNull() ?: cat.limit,
                     spendType = if (binding.typeToggleGroup.checkedButtonId == R.id.incomeButton) "Income" else "Expense"
                 )
-                categoryViewModel.updateCategory(updatedCategory)
+                categoryViewModel.saveCategory(updatedCategory)
                 Toast.makeText(requireContext(), "Category updated", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Delete button click listener
         binding.btnDelete.setOnClickListener {
-            selectedCategory?.let {
-                categoryViewModel.deleteCategory(it)
+            selectedCategory?.id?.let { id ->
+                categoryViewModel.deleteCategoryById(id)
                 Toast.makeText(requireContext(), "Category deleted", Toast.LENGTH_SHORT).show()
             }
         }
@@ -90,5 +92,5 @@ class EditCategoryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    }
+}
 

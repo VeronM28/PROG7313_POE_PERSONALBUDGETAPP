@@ -7,44 +7,50 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivitySavingsGoalPageBinding
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentSavingsGoalPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.SavingsGoalViewModel
 
 class SavingsGoalFragment : Fragment() {
 
-    private var _binding: ActivitySavingsGoalPageBinding? = null
+    private var _binding: FragmentSavingsGoalPageBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SavingsGoalViewModel by viewModels()
     private lateinit var adapter: ContributionsAdapter
     private var goalList: List<SavingsGoal> = listOf()
-    private var selectedGoalId = -1
-    private var userId = -1
+    private var selectedGoalId: String = ""
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivitySavingsGoalPageBinding.inflate(inflater, container, false)
+        _binding = FragmentSavingsGoalPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            userId = it.getInt("USER_ID", -1)
+        // Receive userId from arguments (Firestore expects String)
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
         }
 
         adapter = ContributionsAdapter(emptyList())
         binding.contributionsRecyclerView.adapter = adapter
         binding.contributionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        // Observe savings goals for this user
         viewModel.getSavingsGoals(userId).observe(viewLifecycleOwner) { goals ->
             goalList = goals
             val names = goals.map { it.goalName }
@@ -72,7 +78,11 @@ class SavingsGoalFragment : Fragment() {
     private fun updateProgress(goal: SavingsGoal) {
         viewModel.getContributions(goal.id).observe(viewLifecycleOwner) { contributions ->
             val totalSaved = contributions.sumOf { it.amount }
-            val progress = ((totalSaved / goal.targetAmount) * 100).toInt()
+            val progress = if (goal.targetAmount > 0) {
+                ((totalSaved / goal.targetAmount) * 100).toInt()
+            } else {
+                0
+            }
 
             binding.txtAmount.text = "R${totalSaved.toInt()}"
             binding.txtProgress.text = "You've saved $progress% of your goal!"
@@ -80,7 +90,7 @@ class SavingsGoalFragment : Fragment() {
         }
     }
 
-    private fun loadContributions(goalId: Int) {
+    private fun loadContributions(goalId: String) {
         viewModel.getContributions(goalId).observe(viewLifecycleOwner) { contributions ->
             adapter.updateList(contributions)
         }

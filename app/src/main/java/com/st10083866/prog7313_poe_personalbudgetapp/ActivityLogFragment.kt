@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityLogPageBinding
+
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogAdapter
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentLogPageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.ui.transactions.EditSpendingFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 import java.text.SimpleDateFormat
@@ -24,7 +26,7 @@ import java.util.*
 
 class ActivityLogFragment : Fragment() {
 
-    private var _binding: ActivityLogPageBinding? = null
+    private var _binding: FragmentLogPageBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: TransactionViewModel by viewModels()
@@ -33,26 +35,34 @@ class ActivityLogFragment : Fragment() {
 
     private var fromDate: String = ""
     private var toDate: String = ""
-    private var userId: Int = 1 // replace with actual user ID from arguments if needed
+    private var userId: String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityLogPageBinding.inflate(inflater, container, false)
+        _binding = FragmentLogPageBinding.inflate(inflater, container, false)
+
         return binding.root
     }
     //this function initializes the screen layout and logic for how the screen elements behave
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userId = arguments?.getString("USER_ID") ?: ""
+
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
+        }
         //displays all transaction logs
         adapter = ActivityLogAdapter(
             categoryViewModel,
             onEditClick = { transaction ->
                 val fragment = EditSpendingFragment().apply {
                     arguments = Bundle().apply {
-                        putInt("TRANSACTION_ID", transaction.id)
-                        putInt("USER_ID", userId)
+                        putString("TRANSACTION_ID", transaction.id)
+                        putString("USER_ID", userId)
                     }
                 }
 
@@ -92,14 +102,15 @@ class ActivityLogFragment : Fragment() {
                 val fromMillis = parseDateToMillis(fromDate)
                 val toMillis = parseDateToMillis(toDate)
 
-                viewModel.getTransactionsBetweenDates(userId, fromMillis, toMillis)
-                    .observe(viewLifecycleOwner) { logs ->
-                        adapter.submitList(logs)
-                    }
+                viewModel.fetchTransactionsBetweenDates(userId, fromMillis, toMillis)
+                viewModel.transactions.observe(viewLifecycleOwner) { logs ->
+                    adapter.submitList(logs)
+                }
             } else {
                 Toast.makeText(requireContext(), "Please select both dates!", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
     //this function display the date picker for the user screen
     private fun showDatePicker(onDateSelected: (String) -> Unit) {

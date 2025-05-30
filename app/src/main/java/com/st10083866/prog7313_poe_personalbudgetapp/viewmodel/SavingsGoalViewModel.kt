@@ -5,39 +5,37 @@ import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsGoal
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.SavingsContribution
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
+import com.st10083866.prog7313_poe_personalbudgetapp.repository.SavingsContributionRepository
+
+import com.st10083866.prog7313_poe_personalbudgetapp.repository.SavingsGoalRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SavingsGoalViewModel(application: Application) : AndroidViewModel(application) {
-    private val savingsGoalDao = AppDatabase.getDatabase(application).savingsGoalDao()
-    private val savingsContributionDao = AppDatabase.getDatabase(application).savingsContributionDao()
+class SavingsGoalViewModel : ViewModel() {
 
-    //this function retrives all the savingsGoals
-    fun getSavingsGoals(userId: Int): LiveData<List<SavingsGoal>> {
-        return savingsGoalDao.getGoals(userId)
+    private val repository = SavingsGoalRepository()
+    private val contributionRepository = SavingsContributionRepository()
+
+    // Insert a savings goal
+    fun insertSavingsGoal(goal: SavingsGoal, onResult: (Boolean) -> Unit) {
+        repository.insert(goal, onResult)
     }
 
-    //this function adds a saving Goal
-    fun addSavingsGoal(goal: SavingsGoal) {
-        viewModelScope.launch {
-            savingsGoalDao.insert(goal)
-        }
+    // Get savings goals by user ID
+    fun getSavingsGoals(userId: String): LiveData<List<SavingsGoal>> {
+        return repository.getGoals(userId)
+    }
+    fun getContributions(goalId: String): LiveData<List<SavingsContribution>> {
+        return contributionRepository.getContributions(goalId)
     }
 
-
-    //this function adds a contribution
-    fun addContribution(contribution: SavingsContribution) {
-        viewModelScope.launch {
-            savingsContributionDao.insert(contribution)
-        }
+    // Clean up Firestore listeners
+    override fun onCleared() {
+        super.onCleared()
+        repository.removeGoalsListener()
     }
-
-    //this function gets all the contributions from a specific saving goal
-    fun getContributions(goalId: Int): LiveData<List<SavingsContribution>> {
-        return savingsContributionDao.getContributions(goalId)
-    }
-
-
-
 }

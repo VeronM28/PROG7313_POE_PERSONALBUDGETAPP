@@ -1,38 +1,41 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.viewmodel
 
-import android.app.Application
-import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Category
-import com.st10083866.prog7313_poe_personalbudgetapp.database.AppDatabase
 import com.st10083866.prog7313_poe_personalbudgetapp.repository.BudgetRepository
 import kotlinx.coroutines.launch
 
-class BudgetViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: BudgetRepository
 
-    val allCategories: LiveData<List<Category>>
-    val allBudgets: LiveData<List<Budget>>
+class BudgetViewModel : ViewModel() {
 
-    init {
-        val db = AppDatabase.getDatabase(application)
-        repository = BudgetRepository(db.budgetDao(), db.categoryDao())
-        allCategories = repository.getAllCategories()
-        allBudgets = repository.getAllBudgets()
+    private val repository = BudgetRepository()
+
+    // Expose budgets LiveData from repository
+    val allBudgets: LiveData<List<Budget>> = repository.getAllBudgets()
+    val allCategories: LiveData<List<Category>> = repository.getAllCategories()
+
+
+    private val _operationStatus = MutableLiveData<Boolean>()
+    val operationStatus: LiveData<Boolean> get() = _operationStatus
+
+    fun insertOrUpdate(budget: Budget) {
+        repository.insertOrUpdateBudget(budget) { success ->
+            _operationStatus.postValue(success)
+        }
     }
 
-    fun insertBudget(budget: Budget) = viewModelScope.launch {
-        repository.insertBudget(budget)
+    fun delete(budget: Budget) {
+        repository.deleteBudget(budget) { success ->
+            _operationStatus.postValue(success)
+        }
     }
 
-    fun updateBudget(budget: Budget) = viewModelScope.launch {
-        repository.updateBudget(budget)
+    override fun onCleared() {
+        super.onCleared()
+        repository.clearListener()  // avoid memory leaks
     }
-
-    fun deleteBudget(budget: Budget) = viewModelScope.launch {
-        repository.deleteBudget(budget)
-    }
-
 }

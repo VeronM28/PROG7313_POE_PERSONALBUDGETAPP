@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/cardview_light_background">
+    android:background="@color/cardview_light_background"
+    tools:context=".ActivityLogFragment">
 
     <!-- Date Range Picker -->
     <LinearLayout
@@ -45,11 +46,17 @@
     <!-- Update Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnUpdateLogs"
-        android:layout_width="373dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:background="@drawable/gradient_background"
-        android:text="Update Logs"
-        android:visibility="visible" />
+        android:backgroundTint="@null"
+        android:text="Show Transactions"
+        android:textColor="@android:color/black"
+        android:visibility="visible"
+        app:backgroundTint="@null"
+        app:cornerRadius="50dp" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

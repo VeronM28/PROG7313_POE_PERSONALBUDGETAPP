@@ -18,6 +18,7 @@ import kotlin.getValue
 class ActivityLogAdapter(private val categoryViewModel: CategoryViewModel, val onEditClick: (Transaction) -> Unit, private val onDownloadClick: (Transaction) -> Unit) : RecyclerView.Adapter<ActivityLogAdapter.ViewHolder>(){
 
     private var items = listOf<Transaction>()
+    private var categoryMap = mapOf<String, String>()
 
     //a holder for each item
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,8 +44,8 @@ class ActivityLogAdapter(private val categoryViewModel: CategoryViewModel, val o
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tx = items[position]
 
-        holder.title.text = categoryViewModel.getCategoryForTransaction(tx.categoryId)
-        holder.date.text = formatDate(tx.date)
+        holder.title.text = categoryMap[tx.categoryId] ?: "Unknown"
+        holder.date.text = formatDate(tx.date.toDate().time)
         holder.amount.text = "R${String.format("%,.2f", tx.amount)}"
         holder.method.text = tx.paymentMethod
 
@@ -62,6 +63,11 @@ class ActivityLogAdapter(private val categoryViewModel: CategoryViewModel, val o
             onDownloadClick(tx)
         }
     }
+    fun setCategories(map: Map<String, String>) {
+        categoryMap = map
+        notifyDataSetChanged()
+    }
+
      //this function fetches all the transactions between two dates and replaces the current list of transactions as well as notifies the adapter to refresh the screen
     fun submitList(list: List<Transaction>){
         items = list

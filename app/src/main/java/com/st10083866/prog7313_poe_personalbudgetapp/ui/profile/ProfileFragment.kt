@@ -1,41 +1,51 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.ui.profile
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityProfilePageBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.st10083866.prog7313_poe_personalbudgetapp.LaunchPageActivity
+import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
+
+import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentProfilePageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
 import java.io.File
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: ActivityProfilePageBinding? = null
+    private var _binding: FragmentProfilePageBinding? = null
+
     private val binding get() = _binding!!
 
     private val profileViewModel: LoginViewModel by viewModels()
-    private var userId: Int = -1
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityProfilePageBinding.inflate(inflater, container, false)
+        _binding = FragmentProfilePageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            userId = it.getInt("USER_ID", -1)
+        userId = arguments?.getString("USER_ID") ?: ""
+        if (userId.isBlank()) {
+            Toast.makeText(requireContext(), "Invalid user session", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        if (userId != -1) {
-            profileViewModel.loadUserById(userId)
+        if (userId.isNotBlank()) {
+            profileViewModel.loadUserById(userId.toString())
         }
 
         profileViewModel.user.observe(viewLifecycleOwner) { user ->
@@ -50,6 +60,16 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        binding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+
+            SessionManager(requireContext()).clearSession()
+
+            val intent = Intent(requireContext(), LaunchPageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

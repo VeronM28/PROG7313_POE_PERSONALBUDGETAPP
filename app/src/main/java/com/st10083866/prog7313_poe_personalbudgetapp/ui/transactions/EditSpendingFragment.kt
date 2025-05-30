@@ -7,20 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import com.google.firebase.Timestamp
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Transaction
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentEditSpendingBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.TransactionViewModel
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import android.Manifest
 
 class EditSpendingFragment : Fragment() {
     private var _binding: FragmentEditSpendingBinding? = null
@@ -29,10 +36,28 @@ class EditSpendingFragment : Fragment() {
     private val transactionViewModel: TransactionViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
 
-    private var transactionId: Int = -1
-    private var selectedCategoryId: Int? = null
+    private var transactionId: String? = null
+    private var selectedCategoryId: String? = null
     private var selectedImagePath: String? = null
-    private var userId: Int = -1
+    private var userId: String = ""
+    private lateinit var imageUri: Uri
+
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                openCamera()
+            } else {
+                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            selectedImagePath = imageUri.path
+            val bitmap = BitmapFactory.decodeFile(selectedImagePath)
+            binding.receiptPreview.setImageBitmap(bitmap)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentEditSpendingBinding.inflate(inflater, container, false)
@@ -42,10 +67,10 @@ class EditSpendingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        transactionId = arguments?.getInt("TRANSACTION_ID", -1) ?: -1
-        userId = arguments?.getInt("USER_ID", -1) ?: -1
+        transactionId = arguments?.getString("TRANSACTION_ID")
+        userId = arguments?.getString("USER_ID") ?: ""
 
-        if (transactionId == -1 || userId == -1) {
+        if (transactionId == null || userId.isBlank()) {
             Toast.makeText(requireContext(), "Missing transaction or user ID", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressedDispatcher.onBackPressed()
             return
@@ -55,17 +80,21 @@ class EditSpendingFragment : Fragment() {
         setupCheckBoxes()
         setupReceiptPicker()
         setupPaymentMethods()
-
         loadTransaction()
         setupUpdateButton()
         setupDeleteButton()
     }
 
     private fun loadTransaction() {
-        transactionViewModel.getTransactionById(transactionId).observe(viewLifecycleOwner) { txn ->
+        transactionId?.let { id -> transactionViewModel.fetchTransactionById(id) }
+
+        transactionViewModel.transaction.observe(viewLifecycleOwner) { txn ->
             txn?.let { transactions ->
                 binding.edtAmount.setText(transactions.amount.toString())
-                binding.edtDate.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(transactions.date)))
+                val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(transactions.date.toDate())
+                binding.edtDate.setText(formattedDate)
+
                 selectedCategoryId = transactions.categoryId
                 selectedImagePath = transactions.uploadedPicturePath
 
@@ -73,18 +102,20 @@ class EditSpendingFragment : Fragment() {
                 else binding.checkExpense.isChecked = true
 
                 val paymentOptions = resources.getStringArray(R.array.payment_methods)
-                val paymentIndex = paymentOptions.indexOfFirst { it == transactions.paymentMethod }
-                if (paymentIndex >= 0) binding.spinnerPaymentMethod.setSelection(paymentIndex)
+                val index = paymentOptions.indexOf(transactions.paymentMethod)
+                if (index >= 0) binding.spinnerPaymentMethod.setSelection(index)
 
                 if (!transactions.uploadedPicturePath.isNullOrEmpty()) {
                     val bitmap = BitmapFactory.decodeFile(transactions.uploadedPicturePath)
                     binding.receiptPreview.setImageBitmap(bitmap)
                 }
+
                 loadCategories(transactions.categoryId)
             }
         }
     }
-    private fun loadCategories(selectedId: Int?) {
+
+    private fun loadCategories(selectedId: String?) {
         categoryViewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { categories ->
             val names = categories.map { it.name }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, names)
@@ -130,29 +161,25 @@ class EditSpendingFragment : Fragment() {
 
     private fun setupReceiptPicker() {
         binding.uploadReceiptCard.setOnClickListener {
-            imagePicker.launch("image/*")
-        }
-    }
-
-    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val path = getPathFromUri(it)
-            if (path != null) {
-                selectedImagePath = path
-                val bitmap = BitmapFactory.decodeFile(path)
-                binding.receiptPreview.setImageBitmap(bitmap)
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            } else {
+                openCamera()
             }
         }
     }
 
-    private fun getPathFromUri(uri: Uri): String? {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireContext().contentResolver.query(uri, projection, null, null, null)
-        cursor?.moveToFirst()
-        val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        val path = columnIndex?.let { cursor.getString(it) }
-        cursor?.close()
-        return path
+    private fun openCamera() {
+        val photoFile = File(
+            requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "receipt_${System.currentTimeMillis()}.jpg"
+        )
+        imageUri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.provider",
+            photoFile
+        )
+        cameraLauncher.launch(imageUri)
     }
 
     private fun setupUpdateButton() {
@@ -174,27 +201,39 @@ class EditSpendingFragment : Fragment() {
             val dateMillis = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateStr)?.time ?: 0L
 
             val updatedTxn = Transaction(
-                id = transactionId,
+                id = transactionId ?: UUID.randomUUID().toString(),
                 userOwnerId = userId,
                 amount = amount,
                 type = type,
                 categoryId = selectedCategoryId,
-                date = dateMillis,
+                date = Timestamp(Date(dateMillis)),
                 paymentMethod = paymentMethod,
                 uploadedPicturePath = selectedImagePath
             )
 
-            transactionViewModel.updateTransaction(updatedTxn)
-            Toast.makeText(requireContext(), "Transaction updated", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            transactionViewModel.updateTransaction(updatedTxn) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Transaction updated", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     private fun setupDeleteButton() {
         binding.btnDelete.setOnClickListener {
-            transactionViewModel.deleteTransactionById(transactionId)
-            Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            transactionId?.let {
+                transactionViewModel.deleteTransactionById(it) { success ->
+                    if (success) {
+                        Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show()
+                        requireActivity().supportFragmentManager.popBackStack()
+                    } else {
+                        Toast.makeText(requireContext(), "Delete failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 

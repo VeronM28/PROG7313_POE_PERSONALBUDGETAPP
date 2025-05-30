@@ -10,11 +10,13 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.data.entities.Budget
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.BudgetViewModel
+import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.CategoryViewModel
 
 class EditBudgetFragment : Fragment() {
 
@@ -28,13 +30,13 @@ class EditBudgetFragment : Fragment() {
     private lateinit var btnDelete: MaterialButton
 
     private var selectedBudget: Budget? = null
-    private var categoryMap: Map<String, Int> = mapOf()
-    private var budgetMap: Map<String, Budget> = mapOf()
+    private var categoryMap: Map<String, String> = mapOf() // categoryName -> categoryId
+    private var budgetMap: Map<String, Budget> = mapOf()   // display string -> Budget
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragment_edit_budget, container, false)
     }
 
@@ -51,29 +53,26 @@ class EditBudgetFragment : Fragment() {
         setupCategorySpinner()
         setupBudgetSpinner()
 
-        btnEditBudget.setOnClickListener {
-            updateBudget()
-        }
-
-        btnDelete.setOnClickListener {
-            deleteBudget()
-        }
+        btnEditBudget.setOnClickListener { updateBudget() }
+        btnDelete.setOnClickListener { deleteBudget() }
     }
 
     private fun setupCategorySpinner() {
         viewModel.allCategories.observe(viewLifecycleOwner) { categories ->
             val categoryNames = categories.map { it.name }
-            categoryMap = categories.associateBy({ it.name }, { it.id })
+            categoryMap = categories.associateBy({ it.name }, { it.id }) // id is String
+
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerEditBudget.adapter = adapter
+            spinnerEditBudgetCat.adapter = adapter
         }
+
     }
 
     private fun setupBudgetSpinner() {
         viewModel.allBudgets.observe(viewLifecycleOwner) { budgets ->
             val budgetNames = budgets.map { "Budget ${it.id} (R${it.totalAmount})" }
-            budgetMap = budgets.associateBy({ "Budget ${it.id} (R${it.totalAmount})" }, { it })
+            budgetMap = budgets.associateBy({ "Budget ${it.id} (R${it.totalAmount})" })
 
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, budgetNames)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -83,10 +82,11 @@ class EditBudgetFragment : Fragment() {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     val selectedName = parent.getItemAtPosition(position) as String
                     selectedBudget = budgetMap[selectedName]
+
                     selectedBudget?.let {
                         etEditTotalBudget.setText(it.totalAmount.toString())
                         etEditSpendLimit.setText(it.spendingLimit.toString())
-                        setCategorySpinnerSelection(it.categoryId)
+                        it.categoryId?.let { categoryId -> setCategorySpinnerSelection(categoryId) }
                     }
                 }
 
@@ -97,10 +97,10 @@ class EditBudgetFragment : Fragment() {
         }
     }
 
-    private fun setCategorySpinnerSelection(categoryId: Int) {
+    private fun setCategorySpinnerSelection(categoryId: String) {
         val index = categoryMap.entries.indexOfFirst { it.value == categoryId }
         if (index >= 0) {
-            spinnerEditBudget.setSelection(index)
+            spinnerEditBudgetCat.setSelection(index)
         }
     }
 
@@ -123,13 +123,13 @@ class EditBudgetFragment : Fragment() {
             categoryId = newCategoryId
         )
 
-        viewModel.updateBudget(updatedBudget)
+        viewModel.insertOrUpdate(updatedBudget)
         Toast.makeText(requireContext(), "Budget updated!", Toast.LENGTH_SHORT).show()
     }
 
     private fun deleteBudget() {
         val budget = selectedBudget ?: return
-        viewModel.deleteBudget(budget)
+        viewModel.delete(budget)
         Toast.makeText(requireContext(), "Budget deleted.", Toast.LENGTH_SHORT).show()
     }
 }

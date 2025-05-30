@@ -16,6 +16,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.st10083866.prog7313_poe_personalbudgetapp.ActivityLogFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.HelpInfoFragment
+import com.st10083866.prog7313_poe_personalbudgetapp.InterestCalculatorFragment
 import com.st10083866.prog7313_poe_personalbudgetapp.R
 import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.ActivityMainPageBinding
@@ -91,6 +93,14 @@ class MainPageActivity : AppCompatActivity() {
                 }
                 R.id.navLogPage -> {
                     loadFragment(ActivityLogFragment().withUser(userId))
+                    true
+                }
+                R.id.navInterestCalculator -> {
+                    loadFragment(InterestCalculatorFragment().withUser(userId))
+                    true
+                }
+                R.id.navHelpPage -> {
+                    loadFragment(HelpInfoFragment().withUser(userId))
                     true
                 }
                 else -> false

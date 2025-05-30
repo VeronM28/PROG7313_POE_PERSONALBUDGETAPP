@@ -48,6 +48,9 @@
         <item
             android:id="@+id/navInterestCalculator"
             android:title="Intrest Calculator" />
+        <item
+            android:id="@+id/navHelpPage"
+            android:title="Help Page" />
 
 
 

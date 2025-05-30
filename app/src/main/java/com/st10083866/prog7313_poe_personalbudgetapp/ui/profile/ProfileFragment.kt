@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseAuth
 import com.st10083866.prog7313_poe_personalbudgetapp.LaunchPageActivity
+import com.st10083866.prog7313_poe_personalbudgetapp.SessionManager
 
 import com.st10083866.prog7313_poe_personalbudgetapp.databinding.FragmentProfilePageBinding
 import com.st10083866.prog7313_poe_personalbudgetapp.viewmodel.LoginViewModel
@@ -62,17 +63,13 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes") { _, _ ->
-                    FirebaseAuth.getInstance().signOut()
-                    val intent = Intent(requireContext(), LaunchPageActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
+            FirebaseAuth.getInstance().signOut()
+
+            SessionManager(requireContext()).clearSession()
+
+            val intent = Intent(requireContext(), LaunchPageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

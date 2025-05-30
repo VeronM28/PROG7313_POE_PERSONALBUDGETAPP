@@ -2,6 +2,7 @@ package com.st10083866.prog7313_poe_personalbudgetapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -56,10 +57,13 @@ class LaunchPageActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val session = SessionManager(this)
+        Log.d("SESSION_CHECK", "Firebase user: ${FirebaseAuth.getInstance().currentUser?.email}")
+        Log.d("SESSION_CHECK", "Session logged in: ${session.isLoggedIn()}, ID: ${session.getUserId()}")
+        if (firebaseUser != null && session.isLoggedIn()) {
             val intent = Intent(this, MainPageActivity::class.java)
-            intent.putExtra("USER_ID", user.uid)
+            intent.putExtra("USER_ID", session.getUserId())
             startActivity(intent)
             finish()
         }

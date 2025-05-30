@@ -137,43 +137,43 @@ class MainPageActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        testAuth()
+        //testAuth()
 
 
     }
-    private fun testAuth() {
-        val auth = FirebaseAuth.getInstance()
-        val email = "testuser@example.com"
-        val password = "TestPass123"
-
-        // Try to create a user
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                Log.d(TAG, "User created: ${it.user?.uid}")
-
-                // Now try to sign in
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener { loginResult ->
-                        Log.d(TAG, "Login success: ${loginResult.user?.email}")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e(TAG, "Login failed: ${e.message}")
-                    }
-
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "User creation failed: ${e.message}")
-
-                // Try logging in in case the user already exists
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener { loginResult ->
-                        Log.d(TAG, "Login success (existing user): ${loginResult.user?.email}")
-                    }
-                    .addOnFailureListener { loginError ->
-                        Log.e(TAG, "Login failed (existing user): ${loginError.message}")
-                    }
-            }
-    }
+    //private fun testAuth() {
+    //        val auth = FirebaseAuth.getInstance()
+    //        val email = "testuser@example.com"
+    //        val password = "TestPass123"
+    //
+    //        // Try to create a user
+    //        auth.createUserWithEmailAndPassword(email, password)
+    //            .addOnSuccessListener {
+    //                Log.d(TAG, "User created: ${it.user?.uid}")
+    //
+    //                // Now try to sign in
+    //                auth.signInWithEmailAndPassword(email, password)
+    //                    .addOnSuccessListener { loginResult ->
+    //                        Log.d(TAG, "Login success: ${loginResult.user?.email}")
+    //                    }
+    //                    .addOnFailureListener { e ->
+    //                        Log.e(TAG, "Login failed: ${e.message}")
+    //                    }
+    //
+    //            }
+    //            .addOnFailureListener { e ->
+    //                Log.e(TAG, "User creation failed: ${e.message}")
+    //
+    //                // Try logging in in case the user already exists
+    //                auth.signInWithEmailAndPassword(email, password)
+    //                    .addOnSuccessListener { loginResult ->
+    //                        Log.d(TAG, "Login success (existing user): ${loginResult.user?.email}")
+    //                    }
+    //                    .addOnFailureListener { loginError ->
+    //                        Log.e(TAG, "Login failed (existing user): ${loginError.message}")
+    //                    }
+    //            }
+    //    }
 
 
 

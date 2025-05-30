@@ -17,4 +17,20 @@
         <item>EFT</item>
         <item>Other</item>
     </string-array>
+
+    <string name="label_principal">Principal (P):</string>
+    <string name="hint_principal">Enter principal amount</string>
+    <string name="label_annual_rate">Annual Rate (%) (R):</string>
+    <string name="hint_annual_rate">Enter annual interest rate</string>
+    <string name="label_time">Time (Years) (T):</string>
+    <string name="hint_time">Enter time period in years</string>
+    <string name="label_frequency">Compounding Frequency (per year):</string>
+    <string name="hint_frequency">E.g. 1 for yearly, 12 for monthly</string>
+    <string name="button_simple_interest">Simple Interest</string>
+    <string name="button_compound_interest">Compound Interest</string>
+    <string name="button_calculate">Calculate Interest</string>
+    <string name="button_reset">Reset</string>
+    <string name="label_interest">Interest:</string>
+
+
 </resources>

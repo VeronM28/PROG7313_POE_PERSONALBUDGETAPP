@@ -75,7 +75,7 @@ class CreateSavingsGoalFragment : Fragment() {
                 goalName = goalName,
                 targetAmount = targetAmount,
                 deadline = selectedDeadline,
-                createdAt = getCurrentDate()
+                createdAt = Timestamp.now()
             )
 
             savingsGoalViewModel.insertSavingsGoal(newGoal) { success ->
@@ -89,9 +89,7 @@ class CreateSavingsGoalFragment : Fragment() {
         }
     }
 
-    private fun getCurrentDate(): Timestamp {
-        return Timestamp.now()
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

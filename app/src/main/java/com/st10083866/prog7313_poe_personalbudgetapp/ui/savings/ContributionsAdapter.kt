@@ -28,9 +28,14 @@ class ContributionsAdapter(
 
     override fun onBindViewHolder(holder: ContributionViewHolder, position: Int) {
         val contribution = items[position]
-        val formattedAmount = NumberFormat.getCurrencyInstance(Locale("en", "ZA")).format(contribution.amount)
+
+        val formattedAmount = NumberFormat.getCurrencyInstance(Locale("en", "ZA"))
+            .format(contribution.amount)
         holder.amountText.text = formattedAmount
-        holder.dateText.text = contribution.contributionDate.toDate().toString()
+
+        val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+        val formattedDate = formatter.format(contribution.contributionDate.toDate())
+        holder.dateText.text = formattedDate
     }
 
     override fun getItemCount(): Int = items.size

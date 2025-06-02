@@ -15,8 +15,8 @@
         android:background="@drawable/gradient_background"
         android:backgroundTint="@null"
         android:text="Confirm Changes"
-        android:visibility="visible"
         android:textColor="@color/black"
+        android:visibility="visible"
         app:backgroundTint="@null"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +24,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.833" />
+        app:layout_constraintVertical_bias="0.898" />
 
     <EditText
         android:id="@+id/edtUsername"
@@ -39,7 +39,7 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.248" />
+        app:layout_constraintVertical_bias="0.283" />
 
     <EditText
         android:id="@+id/edtPassword"
@@ -175,8 +175,8 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        android:layout_width="329dp"
-        android:layout_height="39dp"
+        android:layout_width="336dp"
+        android:layout_height="55dp"
         android:text="Edit Profile"
         android:textAlignment="center"
         android:textAllCaps="false"

@@ -53,7 +53,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnViewImage"
                 android:layout_width="232dp"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/gradient_background"
@@ -66,8 +66,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditEntry"
-                android:layout_width="224dp"
-                android:layout_height="38dp"
+                android:layout_width="228dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/gradient_background"

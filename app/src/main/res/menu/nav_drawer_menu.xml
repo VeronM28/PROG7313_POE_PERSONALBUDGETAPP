@@ -11,7 +11,7 @@
         <item
             android:id="@+id/navSavingGoals"
             android:title="Savings Goals"
-            android:icon="@drawable/ic_savings" />
+            android:icon="@drawable/ic_save" />
 
         <item
             android:id="@+id/navEditProfilePage"

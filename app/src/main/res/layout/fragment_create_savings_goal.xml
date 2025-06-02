@@ -59,6 +59,7 @@
                     android:id="@+id/lblcurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:padding="12dp"
                     android:text="R"
                     android:textColor="#000000"
@@ -66,7 +67,8 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.875" />
 
                 <ImageButton
                     android:id="@+id/btnClearAmount"
@@ -129,18 +131,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/gradient_background">
 
-                <TextView
-                    android:id="@+id/lblname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:padding="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <ImageButton
                     android:id="@+id/btnClearName"
                     android:layout_width="wrap_content"
@@ -154,14 +144,13 @@
 
                 <EditText
                     android:id="@+id/edtName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="269dp"
+                    android:layout_height="39dp"
                     android:ems="10"
                     android:inputType="text"
                     android:text=""
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnClearName"
-                    app:layout_constraintStart_toEndOf="@+id/lblname"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

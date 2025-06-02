@@ -1,5 +1,6 @@
 package com.st10083866.prog7313_poe_personalbudgetapp.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,7 +35,6 @@ class SavingsGoalRepository {
     fun getGoals(userId: String): LiveData<List<SavingsGoal>> {
         val liveData = MutableLiveData<List<SavingsGoal>>()
 
-        // Remove previous listener if any
         goalsListener?.remove()
 
         goalsListener = goalsRef
@@ -45,7 +45,17 @@ class SavingsGoalRepository {
                     return@addSnapshotListener
                 }
 
-                val goals = snapshot.documents.mapNotNull { it.toObject(SavingsGoal::class.java) }
+                val goals = snapshot.documents.mapNotNull { doc ->
+                    try {
+                        doc.toObject(SavingsGoal::class.java)?.apply {
+                            id = doc.id
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Firestore", "Error parsing document ${doc.id}", e)
+                        null
+                    }
+                }
+
                 liveData.postValue(goals)
             }
 

@@ -24,8 +24,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtAmount"
-            android:layout_width="337dp"
-            android:layout_height="47dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/gradient_background"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>

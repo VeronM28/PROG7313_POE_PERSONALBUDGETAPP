@@ -15,7 +15,8 @@
 
         <item
             android:id="@+id/navEditProfilePage"
-            android:title="Edit Profile Page" />
+            android:title="Edit Profile Page"
+            android:icon="@drawable/ic_edit"/>
 
         <item
             android:id="@+id/navAddSavingGoal"
@@ -35,7 +36,8 @@
 
         <item
             android:id="@+id/navEditBudget"
-            android:title="Edit Budget" />
+            android:title="Edit Budget"
+            android:icon="@drawable/ic_edit"/>
 
         <item
             android:id="@+id/navLogPage"
@@ -44,13 +46,16 @@
 
         <item
             android:id="@+id/navEditCategory"
-            android:title="Edit Category" />
+            android:title="Edit Category"
+            android:icon="@drawable/ic_edit"/>
         <item
             android:id="@+id/navInterestCalculator"
-            android:title="Intrest Calculator" />
+            android:title="Intrest Calculator"
+            android:icon="@drawable/ic_calculator"/>
         <item
             android:id="@+id/navHelpPage"
-            android:title="Help Page" />
+            android:title="Help Page"
+            android:icon="@drawable/ic_info"/>
 
 
 

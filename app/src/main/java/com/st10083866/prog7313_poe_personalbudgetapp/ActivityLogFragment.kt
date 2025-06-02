@@ -143,16 +143,36 @@ class ActivityLogFragment : Fragment() {
         }
     }
     //this function will use the user's system's download manager to save the image
-    private fun downloadImageFromUrl(imageUrl: String) {
-        val request = DownloadManager.Request(Uri.parse(imageUrl))
-            .setTitle("Transaction Image")
-            .setDescription("Downloading attached image")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setAllowedOverMetered(true)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "transaction_image_${System.currentTimeMillis()}.jpg")
+    private fun downloadImageFromUrl(imagePath: String) {
+        val uri = Uri.parse(imagePath)
 
-        val dm = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        dm.enqueue(request)
+        if (uri.scheme == "http" || uri.scheme == "https") {
+            // Use DownloadManager for HTTP/HTTPS links
+            val request = DownloadManager.Request(uri)
+                .setTitle("Transaction Image")
+                .setDescription("Downloading attached image")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setAllowedOverMetered(true)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "transaction_image_${System.currentTimeMillis()}.jpg"
+                )
+
+            val dm = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
+
+        } else {
+            // Open the image with a viewer instead (for local file paths)
+            try {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "image/*")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Unable to open image", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroyView() {

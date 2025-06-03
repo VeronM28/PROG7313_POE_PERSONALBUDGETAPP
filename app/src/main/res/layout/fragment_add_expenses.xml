@@ -13,8 +13,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amountLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="359dp"
-        android:layout_height="52dp"
+        android:layout_width="322dp"
+        android:layout_height="47dp"
         android:layout_marginTop="56dp"
         android:hint="Amount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,8 +24,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtAmount"
-            android:layout_width="344dp"
-            android:layout_height="43dp"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
             android:background="@drawable/gradient_background"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>

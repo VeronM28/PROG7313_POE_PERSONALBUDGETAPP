@@ -74,8 +74,8 @@
 
     <TextView
         android:id="@+id/txtUsername"
-        android:layout_width="71dp"
-        android:layout_height="19dp"
+        android:layout_width="86dp"
+        android:layout_height="21dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="Username"
